@@ -8,7 +8,11 @@ export default function Category() {
 
   return (
     <>
-      <Header title={"All Categories"} buttonText={"Add Category"} />
+      <Header
+        title={"All Categories"}
+        buttonText={"Add Category"}
+        route="/Categories/AddCategory"
+      />
       <div className="px-20 py-8">
         <Table columns={header1} data={data1} />
       </div>

@@ -8,7 +8,11 @@ export default function Authors() {
 
   return (
     <div>
-      <Header title={"All Authors"} buttonText={"Add Author"} />
+      <Header
+        title={"All Authors"}
+        buttonText={"Add Author"}
+        route="/Authors/AddAuthor"
+      />
       <div className="px-20 py-8">
         <Table columns={header1} data={data1} />
       </div>
