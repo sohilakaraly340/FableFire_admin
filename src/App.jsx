@@ -8,7 +8,13 @@ import Category from "./pages/category/Category";
 import User from "./pages/users/User";
 import Order from "./pages/orders/Order";
 import AddItem from "./pages/addItem/AddItem";
+import AddCategory from "./pages/addCategory/AddCategory";
 
+const InitialValues = {
+  title: "",
+  description: "",
+  images: [],
+};
 function App() {
   // const [darkMode, setDarkMode] = useState(false);
   // useEffect(() => {
@@ -44,6 +50,14 @@ function App() {
             <Route path="/Items/AddItem" element={<AddItem />} />
             <Route path="/Users" element={<User />} />
             <Route path="/Categories" element={<Category />} />
+            <Route
+              path="/Categories/AddCategory"
+              element={<AddCategory mode="add" />}
+            />
+            <Route
+              path="/Categories/EditCategory"
+              element={<AddCategory mode="edit" />}
+            />
             <Route path="/Authors" element={<Authors />} />
             <Route path="/Orders" element={<Order />} />
           </Routes>

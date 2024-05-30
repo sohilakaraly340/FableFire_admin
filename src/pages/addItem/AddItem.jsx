@@ -34,7 +34,7 @@ const editItemInitialValues = {
   authorId: "Marvin Merritt",
 };
 
-const arr = [
+const inputs = [
   { name: "title", title: "Item Name", type: "text" },
   { name: "description", title: "Description", type: "textarea" },
   { name: "images", title: "Images", type: "file", multiple: true },
@@ -115,7 +115,7 @@ export default function AddItem() {
       >
         {({ setFieldValue }) => (
           <Form className="space-y-4">
-            {arr.map((field, index) => (
+            {inputs.map((field, index) => (
               <div key={index}>
                 <label
                   htmlFor={field.name}
