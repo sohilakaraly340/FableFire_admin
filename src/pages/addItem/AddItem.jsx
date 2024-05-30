@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import axios from "axios";
 
 const editItemValidationSchema = Yup.object({
-  itemName: Yup.string().required("Required"),
+  title: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
-  noOfPages: Yup.number()
+  numOfPage: Yup.number()
     .required("Required")
     .positive("Must be a positive number")
     .integer("Must be an integer"),
@@ -13,35 +14,36 @@ const editItemValidationSchema = Yup.object({
   price: Yup.number()
     .required("Required")
     .positive("Must be a positive number"),
-  noOfStock: Yup.number()
+  countInStock: Yup.number()
     .required("Required")
     .positive("Must be a positive number")
     .integer("Must be an integer"),
+  images: Yup.array().min(1, "At least one image is required"),
 });
 
 const editItemInitialValues = {
-  itemName: "",
+  title: "",
   description: "",
-  image: "",
-  noOfPages: "",
+  images: [],
+  numOfPage: "",
   publicationDate: "",
   price: "",
-  noOfStock: "",
-  type: "Books",
+  countInStock: "",
+  itemType: "Books",
   category: "Fiction",
-  author: "Marvin Merritt",
+  authorId: "Marvin Merritt",
 };
 
 const arr = [
-  { name: "itemName", title: "Item Name", type: "text" },
+  { name: "title", title: "Item Name", type: "text" },
   { name: "description", title: "Description", type: "textarea" },
-  { name: "image", title: "Image", type: "file" },
-  { name: "noOfPages", title: "No. of Pages", type: "number" },
+  { name: "images", title: "Images", type: "file", multiple: true },
+  { name: "numOfPage", title: "No. of Pages", type: "number" },
   { name: "publicationDate", title: "Publication Date", type: "date" },
   { name: "price", title: "Price", type: "number" },
-  { name: "noOfStock", title: "No of Stock", type: "number" },
+  { name: "countInStock", title: "No of Stock", type: "number" },
   {
-    name: "type",
+    name: "itemType",
     title: "Type",
     as: "select",
     options: [{ value: "Books", label: "Books" }],
@@ -53,7 +55,7 @@ const arr = [
     options: [{ value: "Fiction", label: "Fiction" }],
   },
   {
-    name: "author",
+    name: "authorId",
     title: "Author",
     as: "select",
     options: [{ value: "Marvin Merritt", label: "Marvin Merritt" }],
@@ -61,44 +63,46 @@ const arr = [
 ];
 
 export default function AddItem() {
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [loading, setloading] = useState(false);
 
   const submit = async (values) => {
     const formData = new FormData();
     for (const key in values) {
-      if (key === "image" && values[key]) {
-        formData.append(key, values[key]);
+      if (key === "images" && values[key].length > 0) {
+        values[key].forEach((file) => formData.append(key, file));
       } else {
         formData.append(key, values[key]);
       }
     }
 
+    console.log(formData);
+
     try {
-      const response = await axios.post("/api/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          JWT: ``,
-        },
-      });
+      setloading(true);
+      const response = await axios.post(
+        "http://localhost:3005/api/v1/admin/item",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcwOTg0MzIsImV4cCI6MTcxNzE4NDgzMn0.w9jGobI-59qnNTCGBRpef1zDVVK76OXu4WsVw4p-FXc`,
+          },
+        }
+      );
       console.log("Success:", response.data);
     } catch (error) {
       console.error("Error:", error);
     }
+    setloading(false);
   };
 
   const handleImageChange = (event, setFieldValue) => {
-    const file = event.currentTarget.files[0];
-    setFieldValue("image", file);
+    const files = Array.from(event.currentTarget.files);
+    setFieldValue("images", files);
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setImagePreview(null);
-    }
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews(previews);
   };
 
   return (
@@ -125,19 +129,21 @@ export default function AddItem() {
                       name={field.name}
                       type="file"
                       className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                      multiple={field.multiple}
                       onChange={(event) =>
                         handleImageChange(event, setFieldValue)
                       }
                     />
-                    {imagePreview && (
-                      <div className="mt-2">
+                    <div className="mt-2 flex space-x-2">
+                      {imagePreviews.map((preview, idx) => (
                         <img
-                          src={imagePreview}
-                          alt="Preview"
+                          key={idx}
+                          src={preview}
+                          alt={`Preview ${idx}`}
                           className="h-40 w-40 object-cover"
                         />
-                      </div>
-                    )}
+                      ))}
+                    </div>
                   </>
                 ) : field.as === "select" ? (
                   <Field
@@ -170,7 +176,8 @@ export default function AddItem() {
             <div>
               <button
                 type="submit"
-                className="mt-4 bg-blue-500 text-white p-2 rounded"
+                className="mt-4 disabled:bg-slate-400 bg-blue-500 text-white p-2 rounded"
+                disabled={loading}
               >
                 Edit Item
               </button>
