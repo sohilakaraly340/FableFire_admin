@@ -2,19 +2,21 @@ import React, { useState } from "react";
 import axios from "axios";
 import * as Yup from "yup";
 import FormCom from "../../components/FormCom";
+
 const ValidationSchema = Yup.object({
-  title: Yup.string().required("Required"),
+  name: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
   images: Yup.array().min(1, "At least one image is required"),
 });
 const InitialValues = { title: "", description: "", images: [] };
+
 const inputs = [
   { name: "images", title: "Images", type: "file", multiple: true },
-  { name: "title", title: "Item Name", type: "text" },
+  { name: "name", title: "Name", type: "text" },
   { name: "description", title: "Description", type: "textarea" },
 ];
 
-export default function AddCategory({ mode, initialValues = InitialValues }) {
+export default function AddAuthor({ mode, initialValues = InitialValues }) {
   const [loading, setloading] = useState(false);
 
   const submit = async (values) => {
@@ -31,7 +33,7 @@ export default function AddCategory({ mode, initialValues = InitialValues }) {
     // try {
     //   setloading(true);
     //   const response = await axios.post(
-    //     "http://localhost:3005/api/v1/admin/category",
+    //     "http://localhost:3005/api/v1/admin/Author",
     //     formData,
     //     {
     //       headers: {
@@ -56,7 +58,7 @@ export default function AddCategory({ mode, initialValues = InitialValues }) {
         inputs={inputs}
         loading={loading}
         mode={mode}
-        page="Category"
+        page="Author"
       />
     </>
   );
