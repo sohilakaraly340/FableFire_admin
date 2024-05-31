@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { createContext } from "react";
 
 export const Context = createContext();
@@ -75,7 +76,6 @@ export const Provider = ({ children }) => {
   const handleEdit = (id) => {
     console.log(`Edit ${id}`);
   };
-
   const handleDelete = (id) => {
     console.log(`Delete ${id}`);
   };
