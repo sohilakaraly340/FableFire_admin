@@ -10,7 +10,7 @@ export default function Dashboard() {
   const [newArrival, setNewArrival] = useState([]);
   const [newOrders, setNewOrders] = useState([]);
 
-  const { header1, header2, data1, data2 } = useContext(Context);
+  const { header1, header2, data2 } = useContext(Context);
 
   const {
     data: items,
@@ -22,7 +22,7 @@ export default function Dashboard() {
     data: orders,
     loading2,
     error2,
-  } = useFetch("http://localhost:3005/api/v1/order", {
+  } = useFetch("http://localhost:3005/api/v1/admin/order", {
     headers: {
       "Content-Type": "multipart/form-data",
       JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcwOTg0MzIsImV4cCI6MTcxNzE4NDgzMn0.w9jGobI-59qnNTCGBRpef1zDVVK76OXu4WsVw4p-FXc`,
@@ -47,13 +47,21 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (items) {
-      const hama = items.data.reverse().slice(0, 2);
-      setNewArrival(hama);
+      const lastTwo = items.data.reverse().slice(0, 2);
+      const extractedData = lastTwo.map((item) => ({
+        name: item.title,
+        price: item.price,
+        stock: item.countInStock,
+        image: item.images[0],
+        category: item.category.title,
+      }));
+      setNewArrival(extractedData);
     }
+
     if (orders) {
-      // console.log(orders);
-      const hama = orders.data.order.reverse().slice(0, 2);
-      setNewOrders(hama);
+      console.log(orders);
+      // const hama = orders.data.order.reverse().slice(0, 2);
+      // setNewOrders(hama);
     }
   }, [items, orders]);
 
@@ -89,7 +97,7 @@ export default function Dashboard() {
 
         <div className="py-9">
           <p className="text-xl font-semibold mb-8">New Arrival</p>
-          <Table columns={header1} data={data1} />
+          <Table columns={header1} data={newArrival} />
         </div>
         <hr className="w-3/4 mx-auto border" />
 
