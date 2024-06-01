@@ -18,7 +18,7 @@ export default function User() {
     {
       headers: {
         "Content-Type": "multipart/form-data",
-        jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcxODA5NTcsImV4cCI6MTcxNzI2NzM1N30.0fCVqtZdq8v3cI4hQNpLPJuvoDYlM2X3qqMz1ZwcoJg",
+        JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
       },
     }
   );

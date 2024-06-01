@@ -14,11 +14,22 @@ export default function FormCom({
   const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
-    if (initialValues && initialValues.images.length > 0) {
-      const previews = initialValues.images.map((image) =>
-        URL.createObjectURL(image)
-      );
-      setImagePreviews(previews);
+    if (
+      initialValues &&
+      initialValues.images &&
+      initialValues.images.length > 0
+    ) {
+      // const previews = initialValues.images
+      //   .map((image) => {
+      //     try {
+      //       return URL.createObjectURL(image);
+      //     } catch (error) {
+      //       console.error("Invalid image URL:", image, error);
+      //       return null;
+      //     }
+      //   })
+      //   .filter(Boolean); // Remove any null values resulting from invalid URLs
+      setImagePreviews(initialValues.images);
     }
   }, [initialValues]);
 
@@ -26,9 +37,19 @@ export default function FormCom({
     const files = Array.from(event.currentTarget.files);
     setFieldValue("images", files);
 
-    const previews = files.map((file) => URL.createObjectURL(file));
+    const previews = files
+      .map((file) => {
+        try {
+          return URL.createObjectURL(file);
+        } catch (error) {
+          console.error("Invalid file URL:", file, error);
+          return null;
+        }
+      })
+      .filter(Boolean); // Remove any null values resulting from invalid URLs
     setImagePreviews(previews);
   };
+
   return (
     <Formik
       initialValues={initialValues}

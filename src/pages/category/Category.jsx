@@ -1,21 +1,28 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Table from "../../components/Table";
 import useFetch from "../../hooks/useFetch";
 import edit from "../../assets/images/icons/edit.svg";
 import trash from "../../assets/images/icons/trash.svg";
+import useDelete from "../../hooks/useDelete";
+import { Link } from "react-router-dom";
+
 export default function Category() {
+  const [category, setCategory] = useState([]);
+
   const thead = [
-    { header: "Image", accessor: "image" },
-    { header: "Name", accessor: "name" },
+    { header: "Image", accessor: "images" },
+    { header: "Name", accessor: "title" },
     { header: "Description", accessor: "description" },
     {
       header: "Actions",
       render: (row) => (
         <>
-          <button className="mr-8" onClick={() => handleEdit(row.id)}>
-            <img src={edit} />
-          </button>
+          <Link to="/Categories/EditCategory" state={{ fromEdit: { row } }}>
+            <button className="mr-8">
+              <img src={edit} />
+            </button>
+          </Link>
           <button onClick={() => handleDelete(row.id)}>
             <img src={trash} />
           </button>
@@ -24,14 +31,25 @@ export default function Category() {
     },
   ];
 
-  const handleEdit = (id) => {
-    console.log(`Edit ${id}`);
-  };
-  const handleDelete = (id) => {
-    console.log(`Delete ${id}`);
-  };
+  const {
+    deleteResource,
+    loading: deleteLoading,
+    error: deleteError,
+  } = useDelete("http://localhost:3005/api/v1/admin/category", {
+    JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
+  });
 
-  const [category, setCategory] = useState([]);
+  const handleDelete = async (id) => {
+    try {
+      await deleteResource(id);
+      setCategory((prevCategories) =>
+        prevCategories.filter((cat) => cat.id !== id)
+      );
+      console.log(`Deleted category with id: ${id}`);
+    } catch (error) {
+      console.error(`Failed to delete category with id: ${id}`, error);
+    }
+  };
 
   const { data, loading, error } = useFetch(
     "http://localhost:3005/api/v1/category",
@@ -41,9 +59,10 @@ export default function Category() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.map((cat) => ({
-        name: cat.title,
+        title: cat.title,
         description: cat.description,
-        image: cat.images[0],
+        images: cat.images,
+        id: cat._id,
       }));
       setCategory(extractedData);
     }

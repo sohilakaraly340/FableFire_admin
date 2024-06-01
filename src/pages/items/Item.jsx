@@ -17,10 +17,10 @@ export default function Item() {
       header: "Actions",
       render: (row) => (
         <>
-          <button className="mr-8" onClick={() => handleEdit(row.id)}>
+          <button className="mr-8" onClick={() => handleEdit(row)}>
             <img src={edit} />
           </button>
-          <button onClick={() => handleDelete(row.id)}>
+          <button onClick={() => handleDelete(row)}>
             <img src={trash} />
           </button>
         </>
@@ -41,10 +41,19 @@ export default function Item() {
         stock: item.countInStock,
         image: item.images[0],
         category: item.category.title,
+        id: item._id,
       }));
       setAllItem(extractedData);
     }
   }, [items]);
+
+  const handleEdit = (id) => {
+    console.log(`Edit ${id}`);
+  };
+  const handleDelete = (id) => {
+    console.log(`Delete ${id}`);
+  };
+
   if (error) {
     return (
       <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
