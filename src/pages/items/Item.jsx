@@ -1,13 +1,32 @@
 import React, { useContext, useEffect, useState } from "react";
 import Table from "../../components/Table";
 import Header from "../../components/Header";
-import { Context } from "../../contexts/Context";
 import useFetch from "../../hooks/useFetch";
+import edit from "../../assets/images/icons/edit.svg";
+import trash from "../../assets/images/icons/trash.svg";
 
 export default function Item() {
-  const { header1, data1 } = useContext(Context);
   const [allItem, setAllItem] = useState([]);
-
+  const thead = [
+    { header: "Image", accessor: "image" },
+    { header: "Name", accessor: "name" },
+    { header: "Price", accessor: "price" },
+    { header: "No.Stock", accessor: "stock" },
+    { header: "Category", accessor: "category" },
+    {
+      header: "Actions",
+      render: (row) => (
+        <>
+          <button className="mr-8" onClick={() => handleEdit(row)}>
+            <img src={edit} />
+          </button>
+          <button onClick={() => handleDelete(row)}>
+            <img src={trash} />
+          </button>
+        </>
+      ),
+    },
+  ];
   const {
     data: items,
     loading,
@@ -22,17 +41,23 @@ export default function Item() {
         stock: item.countInStock,
         image: item.images[0],
         category: item.category.title,
+        id: item._id,
       }));
       setAllItem(extractedData);
     }
   }, [items]);
 
-  if (loading) {
-    return <p className="flex justify-center items-center w-[50%]">loading</p>;
-  }
+  const handleEdit = (id) => {
+    console.log(`Edit ${id}`);
+  };
+  const handleDelete = (id) => {
+    console.log(`Delete ${id}`);
+  };
 
   if (error) {
-    return <p className="flex justify-center items-center w-[50%]">error</p>;
+    return (
+      <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
+    );
   }
 
   return (
@@ -43,7 +68,7 @@ export default function Item() {
         route="/Items/AddItem"
       />
       <div className="px-20 py-8">
-        <Table columns={header1} data={allItem} />
+        <Table columns={thead} data={allItem} loading={loading} />
       </div>
     </>
   );

@@ -8,9 +8,10 @@ export default function Order() {
   const thead = [
     { header: "First Name", accessor: "firstName" },
     { header: "Email", accessor: "email" },
-    { header: "Address", accessor: "address" },
     { header: "Phone", accessor: "phoneNumber" },
-    { header: "Role", accessor: "role" },
+    { header: "Address", accessor: "address" },
+    { header: "Total Price", accessor: "totalPrice" },
+    { header: "Status", accessor: "status" },
   ];
 
   const { data, loading, error } = useFetch(
@@ -18,7 +19,7 @@ export default function Order() {
     {
       headers: {
         "Content-Type": "multipart/form-data",
-        JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcwOTg0MzIsImV4cCI6MTcxNzE4NDgzMn0.w9jGobI-59qnNTCGBRpef1zDVVK76OXu4WsVw4p-FXc`,
+        JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
       },
     }
   );
@@ -26,20 +27,17 @@ export default function Order() {
   useEffect(() => {
     if (data) {
       console.log(data);
-      // const extractedData = data.data.map((user) => ({
-      //   firstName: user.firstName,
-      //   email: user.email,
-      //   address: user.address,
-      //   phoneNumber: user.phoneNumber,
-      //   role: user.role,
-      // }));
-      // setUsers(extractedData);
+      const extractedData = data.data.map((order) => ({
+        firstName: order.firstName,
+        email: order.email,
+        address: order.address,
+        phoneNumber: order.phoneNumber,
+        totalPrice: order.totalPrice,
+        status: order.status,
+      }));
+      setOrders(extractedData);
     }
   }, [data]);
-
-  if (loading) {
-    return <p className="flex justify-center items-center w-[50%]">loading</p>;
-  }
 
   if (error) {
     return <p className="flex justify-center items-center w-[50%]">error</p>;
@@ -51,7 +49,7 @@ export default function Order() {
         <p className="text-2xl font-bold px-8">All Orders</p>
       </div>
       <div className="px-20 py-8">
-        <Table columns={thead} data={orders} />
+        <Table columns={thead} data={orders} loading={loading} />
       </div>
     </>
   );
