@@ -10,22 +10,28 @@ export default function Dashboard() {
   const [newArrival, setNewArrival] = useState([]);
   const [newOrders, setNewOrders] = useState([]);
 
-  const { header1, header2, data2 } = useContext(Context);
+  const thead1 = [
+    { header: "Image", accessor: "image" },
+    { header: "Name", accessor: "name" },
+    { header: "Price", accessor: "price" },
+    { header: "No.Stock", accessor: "stock" },
+    { header: "Category", accessor: "category" },
+  ];
 
   const {
     data: items,
-    loading1,
-    error1,
+    loading: loading1,
+    error: error1,
   } = useFetch("http://localhost:3005/api/v1/item", {});
 
   const {
     data: orders,
-    loading2,
-    error2,
+    loading: loading2,
+    error: error2,
   } = useFetch("http://localhost:3005/api/v1/admin/order", {
     headers: {
       "Content-Type": "multipart/form-data",
-      JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcwOTg0MzIsImV4cCI6MTcxNzE4NDgzMn0.w9jGobI-59qnNTCGBRpef1zDVVK76OXu4WsVw4p-FXc`,
+      JWT: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcxODA5NTcsImV4cCI6MTcxNzI2NzM1N30.0fCVqtZdq8v3cI4hQNpLPJuvoDYlM2X3qqMz1ZwcoJg",
     },
   });
 
@@ -44,6 +50,7 @@ export default function Dashboard() {
     },
     { title: "Our Users", count: 5000, icon: userIcon, color: "#FEDFAC" },
   ];
+  console.log(loading1);
 
   useEffect(() => {
     if (items) {
@@ -64,13 +71,10 @@ export default function Dashboard() {
       // setNewOrders(hama);
     }
   }, [items, orders]);
-
-  if (loading1 || loading2) {
-    return <p className="flex justify-center items-center w-[50%]">loading</p>;
-  }
-
   if (error1 || error2) {
-    return <p className="flex justify-center items-center w-[50%]">error</p>;
+    return (
+      <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
+    );
   }
 
   return (
@@ -97,14 +101,15 @@ export default function Dashboard() {
 
         <div className="py-9">
           <p className="text-xl font-semibold mb-8">New Arrival</p>
-          <Table columns={header1} data={newArrival} />
+
+          <Table columns={thead1} data={newArrival} loading={loading1} />
         </div>
         <hr className="w-3/4 mx-auto border" />
 
-        <div className="py-9">
+        {/* <div className="py-9">
           <p className="text-xl  font-semibold mb-8">Recent Orders</p>
-          <Table columns={header2} data={data2} />
-        </div>
+          <Table columns={header2} data={data2} loading={loading2} />
+        </div> */}
       </div>
     </>
   );

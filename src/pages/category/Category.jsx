@@ -2,7 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Table from "../../components/Table";
 import useFetch from "../../hooks/useFetch";
-
+import edit from "../../assets/images/icons/edit.svg";
+import trash from "../../assets/images/icons/trash.svg";
 export default function Category() {
   const thead = [
     { header: "Image", accessor: "image" },
@@ -12,8 +13,12 @@ export default function Category() {
       header: "Actions",
       render: (row) => (
         <>
-          <button onClick={() => handleEdit(row.id)}>Edit</button>
-          <button onClick={() => handleDelete(row.id)}>Delete</button>
+          <button className="mr-8" onClick={() => handleEdit(row.id)}>
+            <img src={edit} />
+          </button>
+          <button onClick={() => handleDelete(row.id)}>
+            <img src={trash} />
+          </button>
         </>
       ),
     },
@@ -44,12 +49,10 @@ export default function Category() {
     }
   }, [data]);
 
-  if (loading) {
-    return <p className="flex justify-center items-center w-[50%]">loading</p>;
-  }
-
   if (error) {
-    return <p className="flex justify-center items-center w-[50%]">error</p>;
+    return (
+      <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
+    );
   }
 
   return (
@@ -60,7 +63,7 @@ export default function Category() {
         route="/Categories/AddCategory"
       />
       <div className="px-20 py-8">
-        <Table columns={thead} data={category} />
+        <Table columns={thead} data={category} loading={loading} />
       </div>
     </>
   );

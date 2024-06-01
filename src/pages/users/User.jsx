@@ -18,7 +18,7 @@ export default function User() {
     {
       headers: {
         "Content-Type": "multipart/form-data",
-        JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcwOTg0MzIsImV4cCI6MTcxNzE4NDgzMn0.w9jGobI-59qnNTCGBRpef1zDVVK76OXu4WsVw4p-FXc`,
+        jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcxODA5NTcsImV4cCI6MTcxNzI2NzM1N30.0fCVqtZdq8v3cI4hQNpLPJuvoDYlM2X3qqMz1ZwcoJg",
       },
     }
   );
@@ -36,12 +36,10 @@ export default function User() {
     }
   }, [data]);
 
-  if (loading) {
-    return <p className="flex justify-center items-center w-[50%]">loading</p>;
-  }
-
   if (error) {
-    return <p className="flex justify-center items-center w-[50%]">error</p>;
+    return (
+      <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
+    );
   }
 
   return (
@@ -50,7 +48,7 @@ export default function User() {
         <p className="text-2xl font-bold px-8">All User</p>
       </div>
       <div className="px-20 py-8">
-        <Table columns={thead} data={users} />
+        <Table columns={thead} data={users} loading={loading} />
       </div>
     </div>
   );
