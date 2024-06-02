@@ -2,8 +2,7 @@ import Table from "../../components/Table";
 import itemIcon from "../../assets/images/icons/itemsIcon.svg";
 import userIcon from "../../assets/images/icons/ordersIcon.svg";
 import orderIcon from "../../assets/images/icons/usersIcon.svg";
-import { useContext, useEffect, useState } from "react";
-import { Context } from "../../contexts/Context";
+import { useEffect, useState } from "react";
 import useFetch from "../../hooks/useFetch";
 
 export default function Dashboard() {
@@ -11,29 +10,33 @@ export default function Dashboard() {
   const [newOrders, setNewOrders] = useState([]);
 
   const thead1 = [
-    { header: "Image", accessor: "image" },
-    { header: "Name", accessor: "name" },
+    { header: "Image", accessor: "images" },
+    { header: "Name", accessor: "title" },
     { header: "Price", accessor: "price" },
-    { header: "No.Stock", accessor: "stock" },
+    { header: "No.Stock", accessor: "countInStock" },
     { header: "Category", accessor: "category" },
+  ];
+
+  const thead2 = [
+    { header: "First Name", accessor: "firstName" },
+    { header: "Email", accessor: "email" },
+    { header: "Phone", accessor: "phoneNumber" },
+    { header: "Address", accessor: "address" },
+    { header: "Total Price", accessor: "totalPrice" },
+    { header: "Status", accessor: "status" },
   ];
 
   const {
     data: items,
     loading: loading1,
     error: error1,
-  } = useFetch("http://localhost:3005/api/v1/item", {});
+  } = useFetch("http://localhost:3005/api/v1/item");
 
   const {
     data: orders,
     loading: loading2,
     error: error2,
-  } = useFetch("http://localhost:3005/api/v1/admin/order", {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-    },
-  });
+  } = useFetch("http://localhost:3005/api/v1/admin/order");
 
   const boxs = [
     {
@@ -50,27 +53,35 @@ export default function Dashboard() {
     },
     { title: "Our Users", count: 5000, icon: userIcon, color: "#FEDFAC" },
   ];
-  console.log(loading1);
 
   useEffect(() => {
     if (items) {
       const lastTwo = items.data.reverse().slice(0, 2);
       const extractedData = lastTwo.map((item) => ({
-        name: item.title,
+        title: item.title,
         price: item.price,
-        stock: item.countInStock,
-        image: item.images[0],
+        countInStock: item.countInStock,
+        images: item.images,
         category: item.category.title,
       }));
       setNewArrival(extractedData);
     }
 
     if (orders) {
-      console.log(orders);
-      // const hama = orders.data.order.reverse().slice(0, 2);
-      // setNewOrders(hama);
+      const lastTwo = orders.data.reverse().slice(0, 2);
+      const extractedData = lastTwo.map((order) => ({
+        id: order._id,
+        firstName: order.firstName,
+        email: order.email,
+        address: order.address,
+        phoneNumber: order.phoneNumber,
+        totalPrice: order.totalPrice,
+        status: order.status,
+      }));
+      setNewOrders(extractedData);
     }
   }, [items, orders]);
+
   if (error1 || error2) {
     return (
       <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
@@ -106,10 +117,10 @@ export default function Dashboard() {
         </div>
         <hr className="w-3/4 mx-auto border" />
 
-        {/* <div className="py-9">
+        <div className="py-9">
           <p className="text-xl  font-semibold mb-8">Recent Orders</p>
-          <Table columns={header2} data={data2} loading={loading2} />
-        </div> */}
+          <Table columns={thead2} data={newOrders} loading={loading2} />
+        </div>
       </div>
     </>
   );

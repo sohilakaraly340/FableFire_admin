@@ -1,9 +1,16 @@
 import axios from "axios";
 import React, { useState } from "react";
+import usePatch from "../hooks/usePatch";
 
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
   const [loadingStatus, setLoadingStatus] = useState(false);
+
+  const {
+    patchResource,
+    loading: patchLoading,
+    error: patchError,
+  } = usePatch("http://localhost:3005/api/v1/admin/order");
 
   const handleStatusChange = async (event, rowIndex, id) => {
     const { value } = event.target;
@@ -12,25 +19,9 @@ export default function Table({ columns, data, loading }) {
       [rowIndex]: value,
     }));
 
-    console.log(value, id);
-
-    try {
-      setLoadingStatus(true);
-
-      const response = await axios({
-        method: "patch",
-        url: `http://localhost:3005/api/v1/admin/order/${id}`,
-        data: { status: value },
-        headers: {
-          JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-        },
-      });
-
-      console.log("Success:", response.data);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-    setLoadingStatus(false);
+    setLoadingStatus(patchLoading);
+    let res = await patchResource(id, { status: value });
+    console.log(res);
   };
 
   return (

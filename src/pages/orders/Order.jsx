@@ -15,18 +15,11 @@ export default function Order() {
   ];
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/admin/order",
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-      },
-    }
+    "http://localhost:3005/api/v1/admin/order"
   );
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       const extractedData = data.data.map((order) => ({
         id: order._id,
         firstName: order.firstName,

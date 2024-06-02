@@ -36,7 +36,7 @@ export default function FormCom({
           return null;
         }
       })
-      .filter(Boolean); // Remove any null values resulting from invalid URLs
+      .filter(Boolean);
     setImagePreviews(previews);
   };
 

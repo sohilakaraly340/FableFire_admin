@@ -6,9 +6,13 @@ import edit from "../../assets/images/icons/edit.svg";
 import trash from "../../assets/images/icons/trash.svg";
 import { Link } from "react-router-dom";
 import useDelete from "../../hooks/useDelete";
+import PopUp from "../../components/PopUp";
 
 export default function Item() {
   const [allItem, setAllItem] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+
   const thead = [
     { header: "Image", accessor: "images" },
     { header: "Name", accessor: "title" },
@@ -24,37 +28,40 @@ export default function Item() {
               <img src={edit} />
             </button>
           </Link>
-          <button onClick={() => handleDelete(row)}>
-            <img src={trash} />
+          <button onClick={() => handleDeleteConfirmation(row.id)}>
+            <img src={trash} alt="Delete" />
           </button>
         </>
       ),
     },
   ];
 
-  const {
-    deleteResource,
-    loading: deleteLoading,
-    error: deleteError,
-  } = useDelete("http://localhost:3005/api/v1/admin/item", {
-    JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-  });
+  const handleDeleteConfirmation = (id) => {
+    setShowDeleteModal(true);
+    setDeleteItemId(id);
+  };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await deleteResource(id);
-      setAllItem((prevItems) => prevItems.filter((item) => item.id !== id));
-      console.log(`Deleted category with id: ${id}`);
+      let res = await deleteResource(deleteItemId);
+      setAllItem((prevItems) =>
+        prevItems.filter((item) => item.id !== deleteItemId)
+      );
+      console.log(res);
+      setShowDeleteModal(false);
     } catch (error) {
-      console.error(`Failed to delete category with id: ${id}`, error);
+      console.error(`Failed to delete item with id: ${deleteItemId}`, error);
     }
   };
+
+  const { deleteResource } = useDelete(
+    "http://localhost:3005/api/v1/admin/item"
+  );
 
   const { data, loading, error } = useFetch(
     "http://localhost:3005/api/v1/item",
     {}
   );
-  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -91,6 +98,12 @@ export default function Item() {
       <div className="px-20 py-8">
         <Table columns={thead} data={allItem} loading={loading} />
       </div>
+      {showDeleteModal && (
+        <PopUp
+          onDelete={handleDelete}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+      )}
     </>
   );
 }
