@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import FormCom from "../../components/FormCom";
 import { useLocation } from "react-router-dom";
+import usePatch from "../../hooks/usePatch";
+import usePost from "../../hooks/usePost";
 
 const ValidationSchema = Yup.object({
   name: Yup.string().required("Required"),
@@ -17,16 +18,39 @@ const inputs = [
 ];
 
 export default function AddAuthor({ mode, initialValues = {} }) {
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const [error, setError] = useState(null);
+
   const location = useLocation();
 
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
 
-  const submit = async (values) => {
-    console.log(values);
+  const {
+    postResource,
+    loading: postLoading,
+    error: postError,
+  } = usePost("http://localhost:3005/api/v1/admin/author");
 
+  const {
+    patchResource,
+    loading: patchLoading,
+    error: patchError,
+  } = usePatch("http://localhost:3005/api/v1/admin/author");
+
+  useEffect(() => {
+    if (mode === "edit") {
+      setLoading(patchLoading);
+      setError(patchError);
+    } else {
+      setLoading(postLoading);
+      setError(postError);
+    }
+  }, [patchLoading, patchError, postLoading, postError, mode]);
+
+  const submit = async (values) => {
     const formData = new FormData();
     for (const key in values) {
       if (key === "images" && values[key].length > 0) {
@@ -37,29 +61,16 @@ export default function AddAuthor({ mode, initialValues = {} }) {
     }
 
     try {
-      setloading(true);
-      const url =
-        mode === "edit"
-          ? `http://localhost:3005/api/v1/admin/author/${values.id}`
-          : "http://localhost:3005/api/v1/admin/author";
-
-      const method = mode === "edit" ? "patch" : "post";
-
-      const response = await axios({
-        method,
-        url,
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-        },
-      });
-
-      console.log("Success:", response.data);
-    } catch (error) {
-      console.error("Error:", error);
+      let res;
+      if (mode === "edit") {
+        res = await patchResource(values.id, formData);
+      } else {
+        res = await postResource(formData);
+      }
+      console.log(res);
+    } catch (err) {
+      console.error(err);
     }
-    setloading(false);
   };
 
   return (

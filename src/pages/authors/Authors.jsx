@@ -41,22 +41,19 @@ export default function Authors() {
 
   const handleDelete = async () => {
     try {
-      await deleteResource(deleteItemId);
+      let res = await deleteResource(deleteItemId);
       setAuthors((prevAuthors) =>
         prevAuthors.filter((auth) => auth.id !== deleteItemId)
       );
-      console.log(`Deleted author with id: ${deleteItemId}`);
-      setShowDeleteModal(false); // Close the modal after successful deletion
+      console.log(res);
+      setShowDeleteModal(false);
     } catch (error) {
       console.error(`Failed to delete author with id: ${deleteItemId}`, error);
     }
   };
 
   const { deleteResource } = useDelete(
-    "http://localhost:3005/api/v1/admin/author",
-    {
-      JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-    }
+    "http://localhost:3005/api/v1/admin/author"
   );
 
   const { data, loading, error } = useFetch(

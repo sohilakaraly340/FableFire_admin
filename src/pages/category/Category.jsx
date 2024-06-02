@@ -41,12 +41,12 @@ export default function Category() {
 
   const handleDelete = async () => {
     try {
-      await deleteResource(deleteItemId);
+      let res = await deleteResource(deleteItemId);
       setCategory((prevCategories) =>
         prevCategories.filter((cat) => cat.id !== deleteItemId)
       );
-      console.log(`Deleted category with id: ${deleteItemId}`);
-      setShowDeleteModal(false); // Close the modal after successful deletion
+      console.log(res);
+      setShowDeleteModal(false);
     } catch (error) {
       console.error(
         `Failed to delete category with id: ${deleteItemId}`,
