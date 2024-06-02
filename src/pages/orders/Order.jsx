@@ -28,6 +28,7 @@ export default function Order() {
     if (data) {
       console.log(data);
       const extractedData = data.data.map((order) => ({
+        id: order._id,
         firstName: order.firstName,
         email: order.email,
         address: order.address,

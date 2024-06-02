@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
 import FormCom from "../../components/FormCom";
+import { useLocation } from "react-router-dom";
 
 const ValidationSchema = Yup.object({
   title: Yup.string().required("Required"),
@@ -52,9 +52,15 @@ const inputs = [
 
 export default function AddItem({ mode, initialValues = {} }) {
   const [loading, setloading] = useState(false);
+  const location = useLocation();
+
+  if (location.state && location.state.fromEdit) {
+    initialValues = location.state.fromEdit.row;
+  }
 
   const submit = async (values) => {
     console.log(values);
+
     const formData = new FormData();
     for (const key in values) {
       if (key === "images" && values[key].length > 0) {
@@ -64,26 +70,32 @@ export default function AddItem({ mode, initialValues = {} }) {
       }
     }
 
-    console.log(formData);
+    try {
+      setloading(true);
+      const url =
+        mode === "edit"
+          ? `http://localhost:3005/api/v1/admin/item/${values.id}`
+          : "http://localhost:3005/api/v1/admin/item";
 
-    // try {
-    //   setloading(true);
-    //   const response = await axios.post(
-    //     "http://localhost:3005/api/v1/admin/item",
-    //     formData,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //         jwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss",
-    //       },
-    //     }
-    //   );
-    //   console.log("Success:", response.data);
-    // } catch (error) {
-    //   console.error("Error:", error);
-    // }
+      const method = mode === "edit" ? "patch" : "post";
+
+      const response = await axios({
+        method,
+        url,
+        data: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
+        },
+      });
+
+      console.log("Success:", response.data);
+    } catch (error) {
+      console.error("Error:", error);
+    }
     setloading(false);
   };
+
   return (
     <FormCom
       submit={submit}

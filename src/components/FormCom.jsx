@@ -19,16 +19,6 @@ export default function FormCom({
       initialValues.images &&
       initialValues.images.length > 0
     ) {
-      // const previews = initialValues.images
-      //   .map((image) => {
-      //     try {
-      //       return URL.createObjectURL(image);
-      //     } catch (error) {
-      //       console.error("Invalid image URL:", image, error);
-      //       return null;
-      //     }
-      //   })
-      //   .filter(Boolean); // Remove any null values resulting from invalid URLs
       setImagePreviews(initialValues.images);
     }
   }, [initialValues]);
@@ -62,13 +52,19 @@ export default function FormCom({
             <p className="text-2xl font-bold md:px-8">
               {mode === "add" ? `Add ${page}` : `Edit ${page}`}
             </p>
-            <button
-              type="submit"
-              className=" disabled:bg-slate-400 relative overflow-hidden bg-button hover:bg-[#907566] text-white py-3 px-9 rounded focus:outline-none"
-              disabled={loading}
-            >
-              {mode === "add" ? "Add" : "Save"}
-            </button>
+            {loading ? (
+              <button className="btn">
+                <span className="loading loading-spinner"></span>
+                loading
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className=" relative overflow-hidden bg-button hover:bg-[#907566] text-white py-3 px-9 rounded focus:outline-none"
+              >
+                {mode === "add" ? "Add" : "Save"}
+              </button>
+            )}
           </div>
 
           {inputs.map((field, index) => (
@@ -82,7 +78,7 @@ export default function FormCom({
                           key={idx}
                           src={preview}
                           alt={`Preview ${idx}`}
-                          className="h-[50%] w-[50%] object-cover"
+                          className="h-[200px] w-[200px] object-cover"
                         />
                       ))
                     ) : (
