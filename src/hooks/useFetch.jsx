@@ -14,7 +14,7 @@ export default function useGet(url, headers = {}) {
         const response = await axios.get(url, {
           headers: {
             "Content-Type": "multipart/form-data",
-            JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
+            JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTczNTc4NTIsImV4cCI6MTcxNzQ0NDI1Mn0.hPNvnvYp_2CpKJ7H97D9CqomDxTl4Xn6vZRrgVRsI1w`,
             ...headers,
           },
         });

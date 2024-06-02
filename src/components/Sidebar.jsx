@@ -6,7 +6,7 @@ import catIcon from "../assets/images/icons/catIcon.svg";
 import itemIcon from "../assets/images/icons/itemIcon.svg";
 import orderIcon from "../assets/images/icons/orderIcon.svg";
 import userIcon from "../assets/images/icons/userIcon.svg";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
@@ -16,9 +16,7 @@ const Sidebar = () => {
 
   let path = splitPath[1];
 
-  const [selectedItem, setSelectedItem] = useState(
-    path === "" ? "Dashboard" : path
-  );
+  const [selectedItem, setSelectedItem] = useState(path);
 
   const menuItems = [
     { name: "Dashboard", icon: dashIcon },
@@ -60,7 +58,7 @@ const Sidebar = () => {
             onClick={() => {
               setSelectedItem(item.name);
             }}
-            to={item.name === "Dashboard" ? "/" : item.name}
+            to={item.name}
           >
             <img src={item.icon} />
             {isOpen && <p>{item.name}</p>}
