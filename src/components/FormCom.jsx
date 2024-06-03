@@ -47,8 +47,8 @@ export default function FormCom({
       onSubmit={submit}
     >
       {({ setFieldValue }) => (
-        <Form className="space-y-4 ">
-          <div className="flex justify-between items-center ">
+        <Form className="space-y-4">
+          <div className="flex justify-between items-center">
             <p className="text-2xl font-bold md:px-8">
               {mode === "add" ? `Add ${page}` : `Edit ${page}`}
             </p>
@@ -60,7 +60,7 @@ export default function FormCom({
             ) : (
               <button
                 type="submit"
-                className=" relative overflow-hidden bg-button hover:bg-[#907566] text-white py-3 px-9 rounded focus:outline-none"
+                className="relative overflow-hidden bg-button hover:bg-[#907566] text-white py-3 px-9 rounded focus:outline-none"
               >
                 {mode === "add" ? "Add" : "Save"}
               </button>
@@ -68,9 +68,9 @@ export default function FormCom({
           </div>
 
           {inputs.map((field, index) => (
-            <div key={index} className=" md:px-20 py-8 ">
+            <div key={index} className="md:px-20 py-8">
               {field.type === "file" ? (
-                <div className="block w-full p-6 text-center border-[2px] border-button border-dashed  rounded">
+                <div className="block w-full p-6 text-center border-[2px] border-button border-dashed rounded">
                   <div className="flex space-x-2 justify-center">
                     {imagePreviews.length > 0 ? (
                       imagePreviews.map((preview, idx) => (
@@ -82,7 +82,7 @@ export default function FormCom({
                         />
                       ))
                     ) : (
-                      <img src={imageIcon} />
+                      <img src={imageIcon} alt="Upload Icon" />
                     )}
                   </div>
                   <input
@@ -103,17 +103,29 @@ export default function FormCom({
                   </label>
                 </div>
               ) : field.as === "select" ? (
-                <Field
-                  name={field.name}
-                  as="select"
-                  className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                >
-                  {field.options.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </Field>
+                <>
+                  <label
+                    htmlFor={field.name}
+                    className="block text-sm font-bold mb-2"
+                  >
+                    {field.title}
+                  </label>
+                  <Field
+                    name={field.name}
+                    as="select"
+                    className="mt-1 block w-full p-2 border border-gray-300 rounded"
+                    onChange={(event) =>
+                      setFieldValue(field.name, event.target.value)
+                    }
+                  >
+                    <option value="">Select {field.title}</option>
+                    {field.options.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Field>
+                </>
               ) : (
                 <>
                   <label

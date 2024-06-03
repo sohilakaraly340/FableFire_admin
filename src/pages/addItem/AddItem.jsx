@@ -4,6 +4,7 @@ import FormCom from "../../components/FormCom";
 import { useLocation } from "react-router-dom";
 import usePatch from "../../hooks/usePatch";
 import usePost from "../../hooks/usePost";
+import useFetch from "../../hooks/useFetch";
 
 const ValidationSchema = Yup.object({
   title: Yup.string().required("Required"),
@@ -23,33 +24,51 @@ const ValidationSchema = Yup.object({
   images: Yup.array().min(1, "At least one image is required"),
 });
 
-const inputs = [
-  { name: "title", title: "Item Name", type: "text" },
-  { name: "description", title: "Description", type: "textarea" },
-  { name: "images", title: "Images", type: "file", multiple: true },
-  { name: "numOfPage", title: "No. of Pages", type: "number" },
-  { name: "publicationDate", title: "Publication Date", type: "date" },
-  { name: "price", title: "Price", type: "number" },
-  { name: "countInStock", title: "No of Stock", type: "number" },
-  {
-    name: "itemType",
-    title: "Type",
-    as: "select",
-    options: [{ value: "Books", label: "Books" }],
-  },
-  {
-    name: "category",
-    title: "Category",
-    as: "select",
-    options: [{ value: "Fiction", label: "Fiction" }],
-  },
-  {
-    name: "authorId",
-    title: "Author",
-    as: "select",
-    options: [{ value: "Marvin Merritt", label: "Marvin Merritt" }],
-  },
-];
+const createInputs = (data) => {
+  const itemTypeOptions =
+    data?.data?.itemTypeOpitions?.map((option) => ({
+      value: option._id,
+      label: option.itemType,
+    })) || [];
+  const categoryOptions =
+    data?.data?.categoryOpitions?.map((option) => ({
+      value: option._id,
+      label: option.title,
+    })) || [];
+  const authorOptions =
+    data?.data?.authorOpitions?.map((option) => ({
+      value: option._id,
+      label: option.name,
+    })) || [];
+
+  return [
+    { name: "title", title: "Item Name", type: "text" },
+    { name: "description", title: "Description", type: "textarea" },
+    { name: "images", title: "Images", type: "file", multiple: true },
+    { name: "numOfPage", title: "No. of Pages", type: "number" },
+    { name: "publicationDate", title: "Publication Date", type: "date" },
+    { name: "price", title: "Price", type: "number" },
+    { name: "countInStock", title: "No of Stock", type: "number" },
+    {
+      name: "itemType",
+      title: "Type",
+      as: "select",
+      options: itemTypeOptions,
+    },
+    {
+      name: "category",
+      title: "Category",
+      as: "select",
+      options: categoryOptions,
+    },
+    {
+      name: "authorId",
+      title: "Author",
+      as: "select",
+      options: authorOptions,
+    },
+  ];
+};
 
 export default function AddItem({ mode, initialValues = {} }) {
   const [loading, setLoading] = useState(false);
@@ -60,6 +79,8 @@ export default function AddItem({ mode, initialValues = {} }) {
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
+
+  const { data } = useFetch("http://localhost:3005/api/v1/admin/item/options");
 
   const {
     postResource,
@@ -92,6 +113,7 @@ export default function AddItem({ mode, initialValues = {} }) {
         formData.append(key, values[key]);
       }
     }
+    console.log(values);
 
     try {
       let res;
@@ -106,13 +128,17 @@ export default function AddItem({ mode, initialValues = {} }) {
     }
   };
 
+  if (!data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <FormCom
       submit={submit}
       ValidationSchema={ValidationSchema}
       initialValues={initialValues}
-      inputs={inputs}
-      loading={loading}
+      inputs={createInputs(data)}
+      loading={postLoading}
       mode={mode}
       page="Item"
     />

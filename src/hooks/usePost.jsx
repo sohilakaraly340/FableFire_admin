@@ -10,9 +10,7 @@ export default function usePost(url, headers = {}) {
     setLoading(true);
     setError(null);
     try {
-      const contentType = isFormData
-        ? "multipart/form-data"
-        : "application/json";
+      const contentType = "multipart/form-data";
 
       const response = await axios.post(url, data, {
         headers: {
