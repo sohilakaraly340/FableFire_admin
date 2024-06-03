@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import FormCom from "../../components/FormCom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import usePost from "../../hooks/usePost";
 import usePatch from "../../hooks/usePatch";
 
@@ -22,7 +22,7 @@ export default function AddCategory({ mode, initialValues = {} }) {
   const [error, setError] = useState(null);
 
   const location = useLocation();
-
+  const navigate = useNavigate();
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
@@ -66,6 +66,7 @@ export default function AddCategory({ mode, initialValues = {} }) {
       } else {
         res = await postResource(formData);
       }
+      navigate("/Categories");
       console.log(res);
     } catch (err) {
       console.error(err);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import FormCom from "../../components/FormCom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import usePatch from "../../hooks/usePatch";
 import usePost from "../../hooks/usePost";
 
@@ -23,7 +23,7 @@ export default function AddAuthor({ mode, initialValues = {} }) {
   const [error, setError] = useState(null);
 
   const location = useLocation();
-
+  const navigate = useNavigate();
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
@@ -67,6 +67,7 @@ export default function AddAuthor({ mode, initialValues = {} }) {
       } else {
         res = await postResource(formData);
       }
+      navigate("/Authors");
       console.log(res);
     } catch (err) {
       console.error(err);

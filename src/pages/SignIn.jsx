@@ -3,7 +3,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import loginImg from "../assets/images/LoginProj.jpg";
-import usePost from "../hooks/usePost";
 import axios from "axios";
 
 export default function SignIn() {
@@ -18,12 +17,6 @@ export default function SignIn() {
       .required("Password is required"),
   });
   const navigate = useNavigate();
-
-  const {
-    postResource,
-    loading: postLoading,
-    error: postError,
-  } = usePost("http://localhost:3005/api/v1/user/login");
 
   const formik = useFormik({
     initialValues: {
