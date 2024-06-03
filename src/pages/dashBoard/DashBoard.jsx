@@ -110,7 +110,8 @@ export default function Dashboard() {
           {boxs.map((box) => (
             <div
               key={box.title}
-              className={`bg-[${box.color}] p-2 w-[300px] border border-none rounded-md`}
+              style={{ backgroundColor: box.color }}
+              className={`p-2 w-[300px] border border-none rounded-md`}
             >
               <div className="flex gap-1 mb-3">
                 <img src={box.icon} width="40px" />
