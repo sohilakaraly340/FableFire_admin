@@ -8,6 +8,21 @@ import useFetch from "../../hooks/useFetch";
 export default function Dashboard() {
   const [newArrival, setNewArrival] = useState([]);
   const [newOrders, setNewOrders] = useState([]);
+  const [boxs, setBoxs] = useState([
+    {
+      title: "All Items",
+      count: 0,
+      icon: itemIcon,
+      color: "#e7fef6",
+    },
+    {
+      title: "All Orders",
+      count: 0,
+      icon: orderIcon,
+      color: "#FDE2E1",
+    },
+    { title: "Our Users", count: 0, icon: userIcon, color: "#FEDFAC" },
+  ]);
 
   const thead1 = [
     { header: "Image", accessor: "images" },
@@ -37,25 +52,16 @@ export default function Dashboard() {
     loading: loading2,
     error: error2,
   } = useFetch("http://localhost:3005/api/v1/admin/order");
-
-  const boxs = [
-    {
-      title: "All Items",
-      count: 2,
-      icon: itemIcon,
-      color: "#e7fef6",
-    },
-    {
-      title: "All Orders",
-      count: 5,
-      icon: orderIcon,
-      color: "#FDE2E1",
-    },
-    { title: "Our Users", count: 5000, icon: userIcon, color: "#FEDFAC" },
-  ];
+  const {
+    data: users,
+    loading: loading3,
+    error: error3,
+  } = useFetch("http://localhost:3005/api/v1/admin/user");
 
   useEffect(() => {
+    const updatedBoxs = [...boxs];
     if (items) {
+      updatedBoxs[0].count = items.data.length;
       const lastTwo = items.data.reverse().slice(0, 2);
       const extractedData = lastTwo.map((item) => ({
         title: item.title,
@@ -68,6 +74,7 @@ export default function Dashboard() {
     }
 
     if (orders) {
+      updatedBoxs[1].count = orders.data.length;
       const lastTwo = orders.data.reverse().slice(0, 2);
       const extractedData = lastTwo.map((order) => ({
         id: order._id,
@@ -80,6 +87,12 @@ export default function Dashboard() {
       }));
       setNewOrders(extractedData);
     }
+
+    if (users) {
+      updatedBoxs[2].count = users.data.length;
+    }
+
+    setBoxs(updatedBoxs);
   }, [items, orders]);
 
   if (error1 || error2) {
