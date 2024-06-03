@@ -21,36 +21,28 @@ function App() {
   return (
     <>
       {!shouldHideSidebar && <Sidebar />}
-      <div
-        className={`${
-          !shouldHideSidebar ? "ml-[26%] sm:ml-[20%] md:ml-[13%]" : ""
-        } px-4 py-8`}
-      >
-        <Routes>
-          <Route path="/Dashboard" element={<DashBoard />} />
-          <Route path="/Users" element={<User />} />
-          <Route path="/Orders" element={<Order />} />
-          <Route path="/Items" element={<Item />} />
-          <Route path="/Items/AddItem" element={<AddItem mode="add" />} />
-          <Route path="/Items/EditItem" element={<AddItem mode="edit" />} />
-          <Route path="/Categories" element={<Category />} />
-          <Route
-            path="/Categories/AddCategory"
-            element={<AddCategory mode="add" />}
-          />
-          <Route
-            path="/Categories/EditCategory"
-            element={<AddCategory mode="edit" />}
-          />
-          <Route path="/Authors" element={<Authors />} />
-          <Route path="/Authors/AddAuthor" element={<AddAuthor mode="add" />} />
-          <Route
-            path="/Authors/EditAuthor"
-            element={<AddAuthor mode="edit" />}
-          />
-          <Route path="/" element={<SignIn />} />
-        </Routes>
-      </div>
+
+      <Routes>
+        <Route path="/Dashboard" element={<DashBoard />} />
+        <Route path="/Users" element={<User />} />
+        <Route path="/Orders" element={<Order />} />
+        <Route path="/Items" element={<Item />} />
+        <Route path="/Items/AddItem" element={<AddItem mode="add" />} />
+        <Route path="/Items/EditItem" element={<AddItem mode="edit" />} />
+        <Route path="/Categories" element={<Category />} />
+        <Route
+          path="/Categories/AddCategory"
+          element={<AddCategory mode="add" />}
+        />
+        <Route
+          path="/Categories/EditCategory"
+          element={<AddCategory mode="edit" />}
+        />
+        <Route path="/Authors" element={<Authors />} />
+        <Route path="/Authors/AddAuthor" element={<AddAuthor mode="add" />} />
+        <Route path="/Authors/EditAuthor" element={<AddAuthor mode="edit" />} />
+        <Route path="/" element={<SignIn />} />
+      </Routes>
     </>
   );
 }

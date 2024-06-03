@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import FormCom from "../../components/FormCom";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import usePatch from "../../hooks/usePatch";
 import usePost from "../../hooks/usePost";
 
@@ -18,37 +18,19 @@ const inputs = [
 ];
 
 export default function AddAuthor({ mode, initialValues = {} }) {
-  const [loading, setLoading] = useState(false);
-
-  const [error, setError] = useState(null);
-
   const location = useLocation();
-
+  const navigate = useNavigate();
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
 
-  const {
-    postResource,
-    loading: postLoading,
-    error: postError,
-  } = usePost("http://localhost:3005/api/v1/admin/author");
+  const { postResource, loading: postLoading } = usePost(
+    "http://localhost:3005/api/v1/admin/author"
+  );
 
-  const {
-    patchResource,
-    loading: patchLoading,
-    error: patchError,
-  } = usePatch("http://localhost:3005/api/v1/admin/author");
-
-  useEffect(() => {
-    if (mode === "edit") {
-      setLoading(patchLoading);
-      setError(patchError);
-    } else {
-      setLoading(postLoading);
-      setError(postError);
-    }
-  }, [patchLoading, patchError, postLoading, postError, mode]);
+  const { patchResource, loading: patchLoading } = usePatch(
+    "http://localhost:3005/api/v1/admin/author"
+  );
 
   const submit = async (values) => {
     const formData = new FormData();
@@ -60,30 +42,26 @@ export default function AddAuthor({ mode, initialValues = {} }) {
       }
     }
 
-    try {
-      let res;
-      if (mode === "edit") {
-        res = await patchResource(values.id, formData);
-      } else {
-        res = await postResource(formData);
-      }
-      console.log(res);
-    } catch (err) {
-      console.error(err);
+    let res;
+    if (mode === "edit") {
+      res = await patchResource(values.id, formData);
+    } else {
+      res = await postResource(formData);
     }
+    navigate("/Authors");
   };
 
   return (
-    <>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <FormCom
         submit={submit}
         ValidationSchema={ValidationSchema}
         initialValues={initialValues}
         inputs={inputs}
-        loading={loading}
+        loading={postLoading || patchLoading}
         mode={mode}
         page="Author"
       />
-    </>
+    </div>
   );
 }

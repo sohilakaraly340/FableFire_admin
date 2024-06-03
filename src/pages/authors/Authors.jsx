@@ -22,12 +22,12 @@ export default function Authors() {
       render: (row) => (
         <>
           <Link to="/Authors/EditAuthor" state={{ fromEdit: { row } }}>
-            <button className="mr-8">
-              <img src={edit} alt="Edit" />
+            <button>
+              <img src={edit} className="w-[1.6em] mb-2 md:mr-5 md:mb-0" />
             </button>
           </Link>
           <button onClick={() => handleDeleteConfirmation(row.id)}>
-            <img src={trash} alt="Delete" />
+            <img src={trash} alt="Delete" className="w-[1.6em]" />
           </button>
         </>
       ),
@@ -40,19 +40,14 @@ export default function Authors() {
   };
 
   const handleDelete = async () => {
-    try {
-      let res = await deleteResource(deleteItemId);
-      setAuthors((prevAuthors) =>
-        prevAuthors.filter((auth) => auth.id !== deleteItemId)
-      );
-      console.log(res);
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error(`Failed to delete author with id: ${deleteItemId}`, error);
-    }
+    await deleteResource(deleteItemId);
+    setAuthors((prevAuthors) =>
+      prevAuthors.filter((auth) => auth.id !== deleteItemId)
+    );
+    setShowDeleteModal(false);
   };
 
-  const { deleteResource } = useDelete(
+  const { deleteResource, loading: loadingDelete } = useDelete(
     "http://localhost:3005/api/v1/admin/author"
   );
 
@@ -79,19 +74,20 @@ export default function Authors() {
   }
 
   return (
-    <div>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <Header
         title={"All Authors"}
         buttonText={"Add Author"}
         route="/Authors/AddAuthor"
       />
-      <div className="px-20 py-8">
+      <div className="py-8">
         <Table columns={thead} data={authors} loading={loading} />
       </div>
       {showDeleteModal && (
         <PopUp
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
+          loading={loadingDelete}
         />
       )}
     </div>

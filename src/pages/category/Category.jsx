@@ -22,12 +22,12 @@ export default function Category() {
       render: (row) => (
         <>
           <Link to="/Categories/EditCategory" state={{ fromEdit: { row } }}>
-            <button className="mr-8">
-              <img src={edit} alt="Edit" />
+            <button>
+              <img src={edit} className="w-[1.6em] mb-2 md:mr-5 md:mb-0" />
             </button>
           </Link>
           <button onClick={() => handleDeleteConfirmation(row.id)}>
-            <img src={trash} alt="Delete" />
+            <img src={trash} alt="Delete" className="w-[1.6em]" />
           </button>
         </>
       ),
@@ -40,22 +40,14 @@ export default function Category() {
   };
 
   const handleDelete = async () => {
-    try {
-      let res = await deleteResource(deleteItemId);
-      setCategory((prevCategories) =>
-        prevCategories.filter((cat) => cat.id !== deleteItemId)
-      );
-      console.log(res);
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error(
-        `Failed to delete category with id: ${deleteItemId}`,
-        error
-      );
-    }
+    await deleteResource(deleteItemId);
+    setCategory((prevCategories) =>
+      prevCategories.filter((cat) => cat.id !== deleteItemId)
+    );
+    setShowDeleteModal(false);
   };
 
-  const { deleteResource } = useDelete(
+  const { deleteResource, loading: loadingDelete } = useDelete(
     "http://localhost:3005/api/v1/admin/category"
   );
 
@@ -82,21 +74,22 @@ export default function Category() {
   }
 
   return (
-    <>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <Header
         title={"All Categories"}
         buttonText={"Add Category"}
         route="/Categories/AddCategory"
       />
-      <div className="px-20 py-8">
+      <div className="py-8">
         <Table columns={thead} data={category} loading={loading} />
       </div>
       {showDeleteModal && (
         <PopUp
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
+          loading={loadingDelete}
         />
       )}
-    </>
+    </div>
   );
 }

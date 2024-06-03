@@ -20,8 +20,7 @@ export default function Table({ columns, data, loading }) {
     }));
 
     setLoadingStatus(patchLoading);
-    let res = await patchResource(id, { status: value });
-    console.log(res);
+    await patchResource(id, { status: value });
   };
 
   return (
@@ -52,7 +51,7 @@ export default function Table({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {columns.map((column, colIndex) => {
                   const cellData = row[column.accessor];
@@ -73,7 +72,7 @@ export default function Table({ columns, data, loading }) {
                     ) : column.accessor === "images" ? (
                       <img
                         src={`${cellData[0]}`}
-                        className="w-[150px] h-[150px] m-auto"
+                        className="w-[150px] md:w-[100%]  m-auto"
                         alt="image"
                       />
                     ) : (
@@ -81,7 +80,7 @@ export default function Table({ columns, data, loading }) {
                     );
 
                   return (
-                    <td key={colIndex} className="w-[100px]">
+                    <td key={colIndex} className="w-[200px]">
                       {column.render ? column.render(row) : renderedData}
                     </td>
                   );
