@@ -6,13 +6,14 @@ export default function usePatch(url, headers = {}) {
   const [error, setError] = useState(null);
 
   const patchResource = async (id, data) => {
+    const token = localStorage.getItem("token");
     setLoading(true);
     setError(null);
     try {
       const response = await axios.patch(`${url}/${id}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTczNTc4NTIsImV4cCI6MTcxNzQ0NDI1Mn0.hPNvnvYp_2CpKJ7H97D9CqomDxTl4Xn6vZRrgVRsI1w`,
+          JWT: token,
           ...headers,
         },
       });

@@ -8,13 +8,14 @@ export default function useGet(url, headers = {}) {
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
       setLoading(true);
       setError(null);
       try {
         const response = await axios.get(url, {
           headers: {
             "Content-Type": "multipart/form-data",
-            JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTczNTc4NTIsImV4cCI6MTcxNzQ0NDI1Mn0.hPNvnvYp_2CpKJ7H97D9CqomDxTl4Xn6vZRrgVRsI1w`,
+            JWT: token,
             ...headers,
           },
         });

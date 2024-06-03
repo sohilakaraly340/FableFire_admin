@@ -1,9 +1,6 @@
-import axios from "axios";
 import { useFormik } from "formik";
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
-// import { ToastContainer, toast } from "react-toastify";
-// import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import loginImg from "../assets/images/LoginProj.jpg";
 import usePost from "../hooks/usePost";
@@ -40,7 +37,6 @@ export default function SignIn() {
 
         localStorage.setItem("token", res.token);
         navigate("/Dashboard");
-        // }
       } catch (error) {
         console.log(error);
       }
