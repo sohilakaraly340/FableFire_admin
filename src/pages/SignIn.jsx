@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import loginImg from "../assets/images/LoginProj.jpg";
 import usePost from "../hooks/usePost";
+import axios from "axios";
 
 export default function SignIn() {
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -33,10 +34,15 @@ export default function SignIn() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        let res = await postResource(values);
+        const data = await axios.post(
+          "http://localhost:3005/api/v1/user/login",
+          values
+        );
 
-        localStorage.setItem("token", res.token);
-        navigate("/Dashboard");
+        if (data.status == 200) {
+          localStorage.setItem("token", data.data.token);
+          navigate("/Dashboard");
+        }
       } catch (error) {
         console.log(error);
       }
