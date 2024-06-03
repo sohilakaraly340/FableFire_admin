@@ -1,18 +1,22 @@
 import { useState } from "react";
 import axios from "axios";
 
-export default function useDelete(url, headers = {}) {
+export default function usePost(url, headers = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const deleteResource = async (id) => {
+  const postResource = async (data, isFormData = false) => {
     const token = localStorage.getItem("token");
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.delete(`${url}/${id}`, {
+      const contentType = isFormData
+        ? "multipart/form-data"
+        : "application/json";
+
+      const response = await axios.post(url, data, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": contentType,
           JWT: token,
           ...headers,
         },
@@ -27,5 +31,5 @@ export default function useDelete(url, headers = {}) {
     }
   };
 
-  return { deleteResource, loading, error };
+  return { postResource, loading, error };
 }

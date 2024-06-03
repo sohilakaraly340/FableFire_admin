@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/Header";
 import Table from "../../components/Table";
 import useFetch from "../../hooks/useFetch";
-import edit from "../../assets/images/icons/edit.svg";
-import trash from "../../assets/images/icons/trash.svg";
 import useDelete from "../../hooks/useDelete";
 import { Link } from "react-router-dom";
+import edit from "../../assets/images/icons/edit.svg";
+import trash from "../../assets/images/icons/trash.svg";
+import PopUp from "../../components/PopUp";
 
 export default function Category() {
   const [category, setCategory] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteItemId, setDeleteItemId] = useState(null);
 
   const thead = [
     { header: "Image", accessor: "images" },
@@ -20,40 +23,44 @@ export default function Category() {
         <>
           <Link to="/Categories/EditCategory" state={{ fromEdit: { row } }}>
             <button className="mr-8">
-              <img src={edit} />
+              <img src={edit} alt="Edit" />
             </button>
           </Link>
-          <button onClick={() => handleDelete(row.id)}>
-            <img src={trash} />
+          <button onClick={() => handleDeleteConfirmation(row.id)}>
+            <img src={trash} alt="Delete" />
           </button>
         </>
       ),
     },
   ];
 
-  const {
-    deleteResource,
-    loading: deleteLoading,
-    error: deleteError,
-  } = useDelete("http://localhost:3005/api/v1/admin/category", {
-    JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-  });
+  const handleDeleteConfirmation = (id) => {
+    setShowDeleteModal(true);
+    setDeleteItemId(id);
+  };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      await deleteResource(id);
+      let res = await deleteResource(deleteItemId);
       setCategory((prevCategories) =>
-        prevCategories.filter((cat) => cat.id !== id)
+        prevCategories.filter((cat) => cat.id !== deleteItemId)
       );
-      console.log(`Deleted category with id: ${id}`);
+      console.log(res);
+      setShowDeleteModal(false);
     } catch (error) {
-      console.error(`Failed to delete category with id: ${id}`, error);
+      console.error(
+        `Failed to delete category with id: ${deleteItemId}`,
+        error
+      );
     }
   };
 
+  const { deleteResource } = useDelete(
+    "http://localhost:3005/api/v1/admin/category"
+  );
+
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/category",
-    {}
+    "http://localhost:3005/api/v1/category"
   );
 
   useEffect(() => {
@@ -84,6 +91,12 @@ export default function Category() {
       <div className="px-20 py-8">
         <Table columns={thead} data={category} loading={loading} />
       </div>
+      {showDeleteModal && (
+        <PopUp
+          onDelete={handleDelete}
+          onCancel={() => setShowDeleteModal(false)}
+        />
+      )}
     </>
   );
 }

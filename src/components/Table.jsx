@@ -1,7 +1,29 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import usePatch from "../hooks/usePatch";
 
 export default function Table({ columns, data, loading }) {
-  console.log(data);
+  const [selectedStatus, setSelectedStatus] = useState({});
+  const [loadingStatus, setLoadingStatus] = useState(false);
+
+  const {
+    patchResource,
+    loading: patchLoading,
+    error: patchError,
+  } = usePatch("http://localhost:3005/api/v1/admin/order");
+
+  const handleStatusChange = async (event, rowIndex, id) => {
+    const { value } = event.target;
+    setSelectedStatus((prevState) => ({
+      ...prevState,
+      [rowIndex]: value,
+    }));
+
+    setLoadingStatus(patchLoading);
+    let res = await patchResource(id, { status: value });
+    console.log(res);
+  };
+
   return (
     <div className="overflow-x-auto">
       <table className="table border border-sidebar">
@@ -18,32 +40,48 @@ export default function Table({ columns, data, loading }) {
               <tr key={rowIndex}>
                 {columns.map((column, colIndex) => (
                   <td key={colIndex}>
-                    <div className="skeleton h-2 w-[50%] mx-auto my-2"></div>
+                    <div className="skeleton h-2 w-[100px] mx-auto my-2"></div>
                   </td>
                 ))}
               </tr>
             ))
           ) : data.length === 0 ? (
-            <p className="text-3xl font-bold  my-11">No Data</p>
+            <tr>
+              <td colSpan={columns.length}>
+                <p className="text-3xl font-bold my-11">No Data</p>
+              </td>
+            </tr>
           ) : (
-            data.map((row, i) => (
-              <tr key={i}>
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex}>
                 {columns.map((column, colIndex) => {
                   const cellData = row[column.accessor];
 
                   const renderedData =
-                    column.accessor === "images" ? (
+                    column.accessor === "status" ? (
+                      <select
+                        value={selectedStatus[rowIndex] || cellData}
+                        onChange={(e) =>
+                          handleStatusChange(e, rowIndex, row.id)
+                        }
+                        className={`p-2 w-28 text-center m-auto border border-none rounded-lg `}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Canceled">Canceled</option>
+                        <option value="Accepted">Accepted</option>
+                      </select>
+                    ) : column.accessor === "images" ? (
                       <img
                         src={`${cellData[0]}`}
+                        className="w-[150px] h-[150px] m-auto"
                         alt="image"
-                        className="w-[200px]"
                       />
                     ) : (
                       cellData
                     );
 
                   return (
-                    <td key={colIndex}>
+                    <td key={colIndex} className="w-[100px]">
                       {column.render ? column.render(row) : renderedData}
                     </td>
                   );

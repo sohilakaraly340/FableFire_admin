@@ -1,21 +1,26 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
 
-// Custom Hook
-export default function useFetch(url, options) {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+export default function useGet(url, headers = {}) {
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [data, setData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      setLoading(true);
+      setError(null);
       try {
-        setLoading(true);
-        const response = await fetch(url, options);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const result = await response.json();
-        setData(result);
+        const response = await axios.get(url, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            JWT: token,
+            ...headers,
+          },
+        });
+
+        setData(response.data);
       } catch (err) {
         setError(err);
       } finally {
@@ -25,5 +30,6 @@ export default function useFetch(url, options) {
 
     fetchData();
   }, []);
+
   return { data, loading, error };
 }

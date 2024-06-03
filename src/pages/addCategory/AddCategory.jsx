@@ -1,13 +1,16 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import FormCom from "../../components/FormCom";
 import { useLocation } from "react-router-dom";
+import usePost from "../../hooks/usePost";
+import usePatch from "../../hooks/usePatch";
+
 const ValidationSchema = Yup.object({
   title: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
   images: Yup.array().min(1, "At least one image is required"),
 });
+
 const inputs = [
   { name: "images", title: "Images", type: "file", multiple: true },
   { name: "title", title: "Item Name", type: "text" },
@@ -15,16 +18,38 @@ const inputs = [
 ];
 
 export default function AddCategory({ mode, initialValues = {} }) {
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const location = useLocation();
 
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
 
-  const submit = async (values) => {
-    console.log(values);
+  const {
+    postResource,
+    loading: postLoading,
+    error: postError,
+  } = usePost("http://localhost:3005/api/v1/admin/category");
 
+  const {
+    patchResource,
+    loading: patchLoading,
+    error: patchError,
+  } = usePatch("http://localhost:3005/api/v1/admin/category");
+
+  useEffect(() => {
+    if (mode === "edit") {
+      setLoading(patchLoading);
+      setError(patchError);
+    } else {
+      setLoading(postLoading);
+      setError(postError);
+    }
+  }, [patchLoading, patchError, postLoading, postError, mode]);
+
+  const submit = async (values) => {
     const formData = new FormData();
     for (const key in values) {
       if (key === "images" && values[key].length > 0) {
@@ -35,29 +60,16 @@ export default function AddCategory({ mode, initialValues = {} }) {
     }
 
     try {
-      setloading(true);
-      const url =
-        mode === "edit"
-          ? `http://localhost:3005/api/v1/admin/category/${values.id}`
-          : "http://localhost:3005/api/v1/admin/category";
-
-      const method = mode === "edit" ? "patch" : "post";
-
-      const response = await axios({
-        method,
-        url,
-        data: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-          JWT: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNvaGlsYUBnbWFpbC5jb20iLCJpYXQiOjE3MTcyNzA0ODEsImV4cCI6MTcxNzM1Njg4MX0.Pei2vuy2vhbP1PxMHYlLERmeMxI4LOhAqlZEgI7qFss`,
-        },
-      });
-
-      console.log("Success:", response.data);
-    } catch (error) {
-      console.error("Error:", error);
+      let res;
+      if (mode === "edit") {
+        res = await patchResource(values.id, formData);
+      } else {
+        res = await postResource(formData);
+      }
+      console.log(res);
+    } catch (err) {
+      console.error(err);
     }
-    setloading(false);
   };
 
   return (
