@@ -40,19 +40,14 @@ export default function Authors() {
   };
 
   const handleDelete = async () => {
-    try {
-      let res = await deleteResource(deleteItemId);
-      setAuthors((prevAuthors) =>
-        prevAuthors.filter((auth) => auth.id !== deleteItemId)
-      );
-      console.log(res);
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error(`Failed to delete author with id: ${deleteItemId}`, error);
-    }
+    await deleteResource(deleteItemId);
+    setAuthors((prevAuthors) =>
+      prevAuthors.filter((auth) => auth.id !== deleteItemId)
+    );
+    setShowDeleteModal(false);
   };
 
-  const { deleteResource } = useDelete(
+  const { deleteResource, loading: loadingDelete } = useDelete(
     "http://localhost:3005/api/v1/admin/author"
   );
 
@@ -92,6 +87,7 @@ export default function Authors() {
         <PopUp
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
+          loading={loadingDelete}
         />
       )}
     </div>

@@ -113,24 +113,20 @@ export default function AddItem({ mode, initialValues = {} }) {
         formData.append(key, values[key]);
       }
     }
-    console.log(values);
 
-    try {
-      let res;
-      if (mode === "edit") {
-        res = await patchResource(values.id, formData);
-      } else {
-        res = await postResource(formData);
-      }
-      navigate("/Items");
-      console.log(res);
-    } catch (err) {
-      console.error(err);
+    let res;
+    if (mode === "edit") {
+      res = await patchResource(values.id, formData);
+    } else {
+      res = await postResource(formData);
     }
+    navigate("/Items");
   };
 
   if (!data) {
-    return <div>Loading...</div>;
+    return (
+      <span className="m-auto block mt-[20%] loading loading-spinner loading-lg"></span>
+    );
   }
 
   return (
@@ -138,8 +134,8 @@ export default function AddItem({ mode, initialValues = {} }) {
       submit={submit}
       ValidationSchema={ValidationSchema}
       initialValues={initialValues}
-      inputs={createInputs(data)}
-      loading={postLoading}
+      inputs={createInputs(!data)}
+      loading={postLoading || patchLoading}
       mode={mode}
       page="Item"
     />

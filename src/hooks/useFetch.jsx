@@ -23,6 +23,7 @@ export default function useGet(url, headers = {}) {
         setData(response.data);
       } catch (err) {
         setError(err);
+        toast.error(`Error fetching : ${err.response.data.message}`);
       } finally {
         setLoading(false);
       }

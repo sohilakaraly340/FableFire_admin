@@ -40,22 +40,14 @@ export default function Category() {
   };
 
   const handleDelete = async () => {
-    try {
-      let res = await deleteResource(deleteItemId);
-      setCategory((prevCategories) =>
-        prevCategories.filter((cat) => cat.id !== deleteItemId)
-      );
-      console.log(res);
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error(
-        `Failed to delete category with id: ${deleteItemId}`,
-        error
-      );
-    }
+    await deleteResource(deleteItemId);
+    setCategory((prevCategories) =>
+      prevCategories.filter((cat) => cat.id !== deleteItemId)
+    );
+    setShowDeleteModal(false);
   };
 
-  const { deleteResource } = useDelete(
+  const { deleteResource, loading: loadingDelete } = useDelete(
     "http://localhost:3005/api/v1/admin/category"
   );
 
@@ -95,6 +87,7 @@ export default function Category() {
         <PopUp
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
+          loading={loadingDelete}
         />
       )}
     </>

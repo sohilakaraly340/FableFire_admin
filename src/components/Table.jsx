@@ -20,8 +20,7 @@ export default function Table({ columns, data, loading }) {
     }));
 
     setLoadingStatus(patchLoading);
-    let res = await patchResource(id, { status: value });
-    console.log(res);
+    await patchResource(id, { status: value });
   };
 
   return (
@@ -52,7 +51,7 @@ export default function Table({ columns, data, loading }) {
               </td>
             </tr>
           ) : (
-            data.map((row, rowIndex) => (
+            data?.map((row, rowIndex) => (
               <tr key={rowIndex}>
                 {columns.map((column, colIndex) => {
                   const cellData = row[column.accessor];

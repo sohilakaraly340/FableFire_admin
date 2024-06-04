@@ -60,18 +60,13 @@ export default function AddAuthor({ mode, initialValues = {} }) {
       }
     }
 
-    try {
-      let res;
-      if (mode === "edit") {
-        res = await patchResource(values.id, formData);
-      } else {
-        res = await postResource(formData);
-      }
-      navigate("/Authors");
-      console.log(res);
-    } catch (err) {
-      console.error(err);
+    let res;
+    if (mode === "edit") {
+      res = await patchResource(values.id, formData);
+    } else {
+      res = await postResource(formData);
     }
+    navigate("/Authors");
   };
 
   return (

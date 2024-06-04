@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import loginImg from "../assets/images/LoginProj.jpg";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignIn() {
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -36,8 +38,9 @@ export default function SignIn() {
           localStorage.setItem("token", data.data.token);
           navigate("/Dashboard");
         }
+        toast.success("LoggedIn successfully!");
       } catch (error) {
-        console.log(error);
+        toast.error(`Error : ${error.response.data.message}`);
       }
     },
   });

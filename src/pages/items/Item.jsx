@@ -42,19 +42,14 @@ export default function Item() {
   };
 
   const handleDelete = async () => {
-    try {
-      let res = await deleteResource(deleteItemId);
-      setAllItem((prevItems) =>
-        prevItems.filter((item) => item.id !== deleteItemId)
-      );
-      console.log(res);
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error(`Failed to delete item with id: ${deleteItemId}`, error);
-    }
+    await deleteResource(deleteItemId);
+    setAllItem((prevItems) =>
+      prevItems.filter((item) => item.id !== deleteItemId)
+    );
+    setShowDeleteModal(false);
   };
 
-  const { deleteResource } = useDelete(
+  const { deleteResource, loading: loadingDelete } = useDelete(
     "http://localhost:3005/api/v1/admin/item"
   );
 
@@ -102,6 +97,7 @@ export default function Item() {
         <PopUp
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
+          loading={loadingDelete}
         />
       )}
     </>

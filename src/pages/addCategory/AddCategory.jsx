@@ -59,18 +59,13 @@ export default function AddCategory({ mode, initialValues = {} }) {
       }
     }
 
-    try {
-      let res;
-      if (mode === "edit") {
-        res = await patchResource(values.id, formData);
-      } else {
-        res = await postResource(formData);
-      }
-      navigate("/Categories");
-      console.log(res);
-    } catch (err) {
-      console.error(err);
+    let res;
+    if (mode === "edit") {
+      res = await patchResource(values.id, formData);
+    } else {
+      res = await postResource(formData);
     }
+    navigate("/Categories");
   };
 
   return (
