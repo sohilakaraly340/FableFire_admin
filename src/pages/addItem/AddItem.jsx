@@ -71,9 +71,6 @@ const createInputs = (data) => {
 };
 
 export default function AddItem({ mode, initialValues = {} }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
   const location = useLocation();
   const navigate = useNavigate();
   if (location.state && location.state.fromEdit) {
@@ -81,28 +78,13 @@ export default function AddItem({ mode, initialValues = {} }) {
   }
 
   const { data } = useFetch("http://localhost:3005/api/v1/admin/item/options");
+  const { postResource, loading: postLoading } = usePost(
+    "http://localhost:3005/api/v1/admin/item"
+  );
 
-  const {
-    postResource,
-    loading: postLoading,
-    error: postError,
-  } = usePost("http://localhost:3005/api/v1/admin/item");
-
-  const {
-    patchResource,
-    loading: patchLoading,
-    error: patchError,
-  } = usePatch("http://localhost:3005/api/v1/admin/item");
-
-  useEffect(() => {
-    if (mode === "edit") {
-      setLoading(patchLoading);
-      setError(patchError);
-    } else {
-      setLoading(postLoading);
-      setError(postError);
-    }
-  }, [patchLoading, patchError, postLoading, postError, mode]);
+  const { patchResource, loading: patchLoading } = usePatch(
+    "http://localhost:3005/api/v1/admin/item"
+  );
 
   const submit = async (values) => {
     const formData = new FormData();
@@ -135,7 +117,7 @@ export default function AddItem({ mode, initialValues = {} }) {
         submit={submit}
         ValidationSchema={ValidationSchema}
         initialValues={initialValues}
-        inputs={createInputs(!data)}
+        inputs={createInputs(data)}
         loading={postLoading || patchLoading}
         mode={mode}
         page="Item"

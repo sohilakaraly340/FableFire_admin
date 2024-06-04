@@ -23,15 +23,11 @@ export default function Authors() {
         <>
           <Link to="/Authors/EditAuthor" state={{ fromEdit: { row } }}>
             <button>
-              <img
-                src={edit}
-                alt="Edit"
-                className="w-[1em] md:w-[1.5em] mr-5"
-              />
+              <img src={edit} className="w-[1.6em] mb-2 md:mr-5 md:mb-0" />
             </button>
           </Link>
           <button onClick={() => handleDeleteConfirmation(row.id)}>
-            <img src={trash} alt="Delete" className="w-[1em] md:w-[1.5em]" />
+            <img src={trash} alt="Delete" className="w-[1.6em]" />
           </button>
         </>
       ),

@@ -72,7 +72,7 @@ export default function Table({ columns, data, loading }) {
                     ) : column.accessor === "images" ? (
                       <img
                         src={`${cellData[0]}`}
-                        className="w-[100%] md:w-[50%]  m-auto"
+                        className="w-[150px] md:w-[100%]  m-auto"
                         alt="image"
                       />
                     ) : (
@@ -80,7 +80,7 @@ export default function Table({ columns, data, loading }) {
                     );
 
                   return (
-                    <td key={colIndex} className="w-[100px]">
+                    <td key={colIndex} className="w-[200px]">
                       {column.render ? column.render(row) : renderedData}
                     </td>
                   );

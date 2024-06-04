@@ -45,6 +45,7 @@ export default function FormCom({
       initialValues={initialValues}
       validationSchema={ValidationSchema}
       onSubmit={submit}
+      className="ml-[26%] sm:ml-[20%] md:ml-[13%] px-4 py-8"
     >
       {({ setFieldValue }) => (
         <Form className="space-y-4">

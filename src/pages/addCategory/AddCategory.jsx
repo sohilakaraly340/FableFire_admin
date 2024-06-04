@@ -18,36 +18,19 @@ const inputs = [
 ];
 
 export default function AddCategory({ mode, initialValues = {} }) {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
   const location = useLocation();
   const navigate = useNavigate();
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
 
-  const {
-    postResource,
-    loading: postLoading,
-    error: postError,
-  } = usePost("http://localhost:3005/api/v1/admin/category");
+  const { postResource, loading: postLoading } = usePost(
+    "http://localhost:3005/api/v1/admin/category"
+  );
 
-  const {
-    patchResource,
-    loading: patchLoading,
-    error: patchError,
-  } = usePatch("http://localhost:3005/api/v1/admin/category");
-
-  useEffect(() => {
-    if (mode === "edit") {
-      setLoading(patchLoading);
-      setError(patchError);
-    } else {
-      setLoading(postLoading);
-      setError(postError);
-    }
-  }, [patchLoading, patchError, postLoading, postError, mode]);
+  const { patchResource, loading: patchLoading } = usePatch(
+    "http://localhost:3005/api/v1/admin/category"
+  );
 
   const submit = async (values) => {
     const formData = new FormData();
@@ -75,7 +58,7 @@ export default function AddCategory({ mode, initialValues = {} }) {
         ValidationSchema={ValidationSchema}
         initialValues={initialValues}
         inputs={inputs}
-        loading={loading}
+        loading={postLoading || patchLoading}
         mode={mode}
         page="Category"
       />
