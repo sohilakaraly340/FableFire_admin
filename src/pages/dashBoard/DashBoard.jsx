@@ -102,10 +102,10 @@ export default function Dashboard() {
   }
 
   return (
-    <>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <p className="text-2xl font-bold px-8">Over View</p>
 
-      <div className="px-20 ">
+      <div>
         <div className="flex flex-wrap justify-center gap-5 py-6">
           {boxs.map((box) => (
             <div
@@ -136,6 +136,6 @@ export default function Dashboard() {
           <Table columns={thead2} data={newOrders} loading={loading2} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

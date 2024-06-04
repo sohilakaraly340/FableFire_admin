@@ -72,7 +72,7 @@ export default function Table({ columns, data, loading }) {
                     ) : column.accessor === "images" ? (
                       <img
                         src={`${cellData[0]}`}
-                        className="w-[150px] h-[150px] m-auto"
+                        className="w-[100%] md:w-[50%]  m-auto"
                         alt="image"
                       />
                     ) : (

@@ -38,13 +38,13 @@ export default function Order() {
   }
 
   return (
-    <>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <div className="flex justify-between items-center ">
         <p className="text-2xl font-bold px-8">All Orders</p>
       </div>
-      <div className="px-20 py-8">
+      <div className="py-8">
         <Table columns={thead} data={orders} loading={loading} />
       </div>
-    </>
+    </div>
   );
 }

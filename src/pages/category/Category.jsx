@@ -22,12 +22,16 @@ export default function Category() {
       render: (row) => (
         <>
           <Link to="/Categories/EditCategory" state={{ fromEdit: { row } }}>
-            <button className="mr-8">
-              <img src={edit} alt="Edit" />
+            <button>
+              <img
+                src={edit}
+                alt="Edit"
+                className="w-[1em] md:w-[1.5em] mr-5"
+              />
             </button>
           </Link>
           <button onClick={() => handleDeleteConfirmation(row.id)}>
-            <img src={trash} alt="Delete" />
+            <img src={trash} alt="Delete" className="w-[1em] md:w-[1.5em]" />
           </button>
         </>
       ),
@@ -74,13 +78,13 @@ export default function Category() {
   }
 
   return (
-    <>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <Header
         title={"All Categories"}
         buttonText={"Add Category"}
         route="/Categories/AddCategory"
       />
-      <div className="px-20 py-8">
+      <div className="py-8">
         <Table columns={thead} data={category} loading={loading} />
       </div>
       {showDeleteModal && (
@@ -90,6 +94,6 @@ export default function Category() {
           loading={loadingDelete}
         />
       )}
-    </>
+    </div>
   );
 }

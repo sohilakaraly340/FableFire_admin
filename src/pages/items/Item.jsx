@@ -24,12 +24,12 @@ export default function Item() {
       render: (row) => (
         <>
           <Link to="/Items/EditItem" state={{ fromEdit: { row } }}>
-            <button className="mr-8">
-              <img src={edit} />
+            <button>
+              <img src={edit} className="w-[1em] md:w-[1.5em] mr-5" />
             </button>
           </Link>
           <button onClick={() => handleDeleteConfirmation(row.id)}>
-            <img src={trash} alt="Delete" />
+            <img src={trash} alt="Delete" className="w-[1em] md:w-[1.5em]" />
           </button>
         </>
       ),
@@ -84,13 +84,13 @@ export default function Item() {
   }
 
   return (
-    <>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <Header
         title={"All Items"}
         buttonText={"Add Item"}
         route="/Items/AddItem"
       />
-      <div className="px-20 py-8">
+      <div className=" py-8">
         <Table columns={thead} data={allItem} loading={loading} />
       </div>
       {showDeleteModal && (
@@ -100,6 +100,6 @@ export default function Item() {
           loading={loadingDelete}
         />
       )}
-    </>
+    </div>
   );
 }

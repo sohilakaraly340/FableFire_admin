@@ -22,12 +22,16 @@ export default function Authors() {
       render: (row) => (
         <>
           <Link to="/Authors/EditAuthor" state={{ fromEdit: { row } }}>
-            <button className="mr-8">
-              <img src={edit} alt="Edit" />
+            <button>
+              <img
+                src={edit}
+                alt="Edit"
+                className="w-[1em] md:w-[1.5em] mr-5"
+              />
             </button>
           </Link>
           <button onClick={() => handleDeleteConfirmation(row.id)}>
-            <img src={trash} alt="Delete" />
+            <img src={trash} alt="Delete" className="w-[1em] md:w-[1.5em]" />
           </button>
         </>
       ),
@@ -74,13 +78,13 @@ export default function Authors() {
   }
 
   return (
-    <div>
+    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <Header
         title={"All Authors"}
         buttonText={"Add Author"}
         route="/Authors/AddAuthor"
       />
-      <div className="px-20 py-8">
+      <div className="py-8">
         <Table columns={thead} data={authors} loading={loading} />
       </div>
       {showDeleteModal && (
