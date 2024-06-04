@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import SelectInput from "./SelectInput";
 import imageIcon from "../assets/images/icons/imgeIcon.png";
 
 export default function FormCom({
@@ -45,9 +46,8 @@ export default function FormCom({
       initialValues={initialValues}
       validationSchema={ValidationSchema}
       onSubmit={submit}
-      className="ml-[26%] sm:ml-[20%] md:ml-[13%] px-4 py-8"
     >
-      {({ setFieldValue }) => (
+      {({ setFieldValue, values }) => (
         <Form className="space-y-4">
           <div className="flex justify-between items-center">
             <p className="text-2xl font-bold md:px-8">
@@ -104,29 +104,11 @@ export default function FormCom({
                   </label>
                 </div>
               ) : field.as === "select" ? (
-                <>
-                  <label
-                    htmlFor={field.name}
-                    className="block text-sm font-bold mb-2"
-                  >
-                    {field.title}
-                  </label>
-                  <Field
-                    name={field.name}
-                    as="select"
-                    className="mt-1 block w-full p-2 border border-gray-300 rounded"
-                    onChange={(event) =>
-                      setFieldValue(field.name, event.target.value)
-                    }
-                  >
-                    <option value="">Select {field.title}</option>
-                    {field.options.map((option) => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </Field>
-                </>
+                <SelectInput
+                  field={field}
+                  values={values}
+                  setFieldValue={setFieldValue}
+                />
               ) : (
                 <>
                   <label
