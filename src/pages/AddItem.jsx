@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import * as Yup from "yup";
-import FormCom from "../../components/FormCom";
+import FormCom from "../components/FormCom";
 import { useLocation, useNavigate } from "react-router-dom";
-import usePatch from "../../hooks/usePatch";
-import usePost from "../../hooks/usePost";
-import useFetch from "../../hooks/useFetch";
+import usePatch from "../hooks/usePatch";
+import usePost from "../hooks/usePost";
+import useFetch from "../hooks/useFetch";
 
 const ValidationSchema = Yup.object({
   title: Yup.string().required("Required"),

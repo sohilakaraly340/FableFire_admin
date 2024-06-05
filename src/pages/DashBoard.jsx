@@ -1,9 +1,9 @@
-import Table from "../../components/Table";
-import itemIcon from "../../assets/images/icons/itemsIcon.svg";
-import userIcon from "../../assets/images/icons/ordersIcon.svg";
-import orderIcon from "../../assets/images/icons/usersIcon.svg";
+import Table from "../components/Table";
+import itemIcon from "../assets/images/icons/itemsIcon.svg";
+import userIcon from "../assets/images/icons/ordersIcon.svg";
+import orderIcon from "../assets/images/icons/usersIcon.svg";
 import { useEffect, useState } from "react";
-import useFetch from "../../hooks/useFetch";
+import useFetch from "../hooks/useFetch";
 
 export default function Dashboard() {
   const [newArrival, setNewArrival] = useState([]);

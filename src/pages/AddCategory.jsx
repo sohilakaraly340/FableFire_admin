@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import * as Yup from "yup";
-import FormCom from "../../components/FormCom";
+import FormCom from "../components/FormCom";
 import { useLocation, useNavigate } from "react-router-dom";
-import usePatch from "../../hooks/usePatch";
-import usePost from "../../hooks/usePost";
+import usePost from "../hooks/usePost";
+import usePatch from "../hooks/usePatch";
 
 const ValidationSchema = Yup.object({
-  name: Yup.string().required("Required"),
+  title: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
   images: Yup.array().min(1, "At least one image is required"),
 });
 
 const inputs = [
   { name: "images", title: "Images", type: "file", multiple: true },
-  { name: "name", title: "Name", type: "text" },
+  { name: "title", title: "Item Name", type: "text" },
   { name: "description", title: "Description", type: "textarea" },
 ];
 
-export default function AddAuthor({ mode, initialValues = {} }) {
+export default function AddCategory({ mode, initialValues = {} }) {
   const location = useLocation();
   const navigate = useNavigate();
   if (location.state && location.state.fromEdit) {
@@ -25,11 +25,11 @@ export default function AddAuthor({ mode, initialValues = {} }) {
   }
 
   const { postResource, loading: postLoading } = usePost(
-    "http://localhost:3005/api/v1/admin/author"
+    "http://localhost:3005/api/v1/admin/category"
   );
 
   const { patchResource, loading: patchLoading } = usePatch(
-    "http://localhost:3005/api/v1/admin/author"
+    "http://localhost:3005/api/v1/admin/category"
   );
 
   const submit = async (values) => {
@@ -48,7 +48,7 @@ export default function AddAuthor({ mode, initialValues = {} }) {
     } else {
       res = await postResource(formData);
     }
-    navigate("/Authors");
+    navigate("/Categories");
   };
 
   return (
@@ -60,7 +60,7 @@ export default function AddAuthor({ mode, initialValues = {} }) {
         inputs={inputs}
         loading={postLoading || patchLoading}
         mode={mode}
-        page="Author"
+        page="Category"
       />
     </div>
   );
