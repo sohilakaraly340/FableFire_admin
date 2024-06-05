@@ -1,6 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
-import Table from "../../components/Table";
-import useFetch from "../../hooks/useFetch";
+import React, { useEffect, useState } from "react";
+import Table from "../components/Table";
+import useFetch from "../hooks/useFetch";
 
 export default function User() {
   const [users, setUsers] = useState([]);

@@ -1,13 +1,16 @@
 import React from "react";
 import { Field, ErrorMessage } from "formik";
 
-const SelectInput = ({ field, values, setFieldValue }) => {
-  //   const currentOption = field.options.map((option) => {
-  //     console.log(option.value, values[field.value]);
+const SelectField = ({ field, values, setFieldValue }) => {
+  const currentOption = field.options.find(
+    (option) => option.value === values[field.name]
+  );
+  // const currentOption = field.options.map((option) => {
+  //   console.log(option.value, values[field.value]);
 
-  //     return option.value === values[field.name];
-  //   });
-  //   console.log(field, values);
+  //   return option.value === values[field.name];
+  // });
+  // console.log(field, values);
 
   return (
     <>
@@ -22,11 +25,11 @@ const SelectInput = ({ field, values, setFieldValue }) => {
         onChange={(event) => setFieldValue(field.name, event.target.value)}
       >
         <option value="">Select {field.title}</option>
-        {/* {currentOption && (
+        {currentOption && (
           <option value={currentOption.value} selected>
             {currentOption.label}
           </option>
-        )} */}
+        )}
         {field.options
           .filter((option) => option.value !== values[field.name])
           .map((option) => (
@@ -44,4 +47,4 @@ const SelectInput = ({ field, values, setFieldValue }) => {
   );
 };
 
-export default SelectInput;
+export default SelectField;

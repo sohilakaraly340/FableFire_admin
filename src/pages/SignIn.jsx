@@ -97,7 +97,11 @@ export default function SignIn() {
           </form>
         </div>
         <figure className="hidden lg:block w-full lg:w-6/12  ">
-          <img src={loginImg} alt="Album" className="w-full h-full   " />
+          <img
+            src={loginImg}
+            alt="Album"
+            className="hidden md:block w-full h-full "
+          />
         </figure>
       </div>
     </>
