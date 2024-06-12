@@ -12,7 +12,9 @@ import Authors from "./pages/Authors";
 import AddAuthor from "./pages/AddAuthor";
 import AddItem from "./pages/AddItem";
 import Page404 from "./pages/Page404";
-
+import SignIn from "./pages/SignIn";
+import ItemType from "./pages/ItemType";
+import AddItemType from "./pages/AddItemType";
 function App() {
   const location = useLocation();
   const hideSidebarRoutes = ["/"];
@@ -43,6 +45,20 @@ function App() {
           path="/Items/EditItem"
           element={<PrivateRoute element={<AddItem mode="edit" />} />}
         />
+
+        <Route
+          path="/ItemTypes"
+          element={<PrivateRoute element={<ItemType />} />}
+        />
+        <Route
+          path="/ItemTypes/AddItemType"
+          element={<PrivateRoute element={<AddItemType mode="add" />} />}
+        />
+        <Route
+          path="/ItemTypes/EditItemType"
+          element={<PrivateRoute element={<AddItemType mode="edit" />} />}
+        />
+
         <Route
           path="/Categories"
           element={<PrivateRoute element={<Category />} />}

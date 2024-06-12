@@ -1,23 +1,17 @@
 import React from "react";
-import * as Yup from "yup";
-import FormCom from "../components/FormCom";
 import { useLocation, useNavigate } from "react-router-dom";
 import usePost from "../hooks/usePost";
 import usePatch from "../hooks/usePatch";
+import * as Yup from "yup";
+import FormCom from "../components/FormCom";
 
 const ValidationSchema = Yup.object({
-  title: Yup.string().required("Required"),
-  description: Yup.string().required("Required"),
-  images: Yup.array().min(1, "At least one image is required"),
+  itemType: Yup.string().required("Required"),
 });
 
-const inputs = [
-  { name: "images", title: "Images", type: "file", multiple: true },
-  { name: "title", title: "Item Name", type: "text" },
-  { name: "description", title: "Description", type: "textarea" },
-];
+const inputs = [{ name: "itemType", title: "Item Type", type: "text" }];
 
-export default function AddCategory({ mode, initialValues = {} }) {
+export default function AddItemType({ mode, initialValues = {} }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,22 +20,16 @@ export default function AddCategory({ mode, initialValues = {} }) {
   }
 
   const { postResource, loading: postLoading } = usePost(
-    "http://localhost:3005/api/v1/admin/category"
+    "http://localhost:3005/api/v1/admin/itemType"
   );
 
   const { patchResource, loading: patchLoading } = usePatch(
-    "http://localhost:3005/api/v1/admin/category"
+    "http://localhost:3005/api/v1/admin/itemType"
   );
 
   const submit = async (values) => {
     const formData = new FormData();
-    for (const key in values) {
-      if (key === "images" && values[key].length > 0) {
-        values[key].forEach((file) => formData.append(key, file));
-      } else {
-        formData.append(key, values[key]);
-      }
-    }
+    formData.append("itemType", values.itemType);
 
     let res;
     if (mode === "edit") {
@@ -49,7 +37,7 @@ export default function AddCategory({ mode, initialValues = {} }) {
     } else {
       res = await postResource(formData);
     }
-    navigate("/Categories");
+    // navigate("/ItemTypes");
   };
 
   return (
@@ -61,7 +49,7 @@ export default function AddCategory({ mode, initialValues = {} }) {
         inputs={inputs}
         loading={postLoading || patchLoading}
         mode={mode}
-        page="Category"
+        page="Item Type"
       />
     </div>
   );
