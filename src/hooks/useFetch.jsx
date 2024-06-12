@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export default function useGet(url, headers = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -23,7 +24,13 @@ export default function useGet(url, headers = {}) {
         setData(response.data);
       } catch (err) {
         setError(err);
-        toast.error(`Error fetching : ${err.response.data.message}`);
+        if (err.response.data.message === "jwt expired") {
+          toast.error("Session Expired! Please login again.");
+          localStorage.clear();
+          window.location.reload();
+        } else {
+          toast.error(`Error fetching : ${err.response.data.message}`);
+        }
       } finally {
         setLoading(false);
       }

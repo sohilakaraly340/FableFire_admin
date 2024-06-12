@@ -1,16 +1,12 @@
-import axios from "axios";
 import React, { useState } from "react";
 import usePatch from "../hooks/usePatch";
 
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
-  const [loadingStatus, setLoadingStatus] = useState(false);
 
-  const {
-    patchResource,
-    loading: patchLoading,
-    error: patchError,
-  } = usePatch("http://localhost:3005/api/v1/admin/order");
+  const { patchResource } = usePatch(
+    "http://localhost:3005/api/v1/admin/order"
+  );
 
   const handleStatusChange = async (event, rowIndex, id) => {
     const { value } = event.target;
@@ -19,7 +15,6 @@ export default function Table({ columns, data, loading }) {
       [rowIndex]: value,
     }));
 
-    setLoadingStatus(patchLoading);
     await patchResource(id, { status: value });
   };
 
@@ -44,7 +39,7 @@ export default function Table({ columns, data, loading }) {
                 ))}
               </tr>
             ))
-          ) : data.length === 0 ? (
+          ) : data.length === 0 && !loading ? (
             <tr>
               <td colSpan={columns.length}>
                 <p className="text-3xl font-bold my-11">No Data</p>
@@ -72,7 +67,7 @@ export default function Table({ columns, data, loading }) {
                     ) : column.accessor === "images" ? (
                       <img
                         src={`${cellData[0]}`}
-                        className="w-[150px] md:w-[100%]  m-auto"
+                        className="w-[150px] md:w-[80%]  m-auto"
                         alt="image"
                       />
                     ) : (

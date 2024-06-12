@@ -25,6 +25,7 @@ const Sidebar = () => {
     { name: "Users", icon: userIcon },
     { name: "Orders", icon: orderIcon },
     { name: "Authors", icon: authorIcon },
+    { name: "ItemTypes", icon: itemIcon },
   ];
 
   return (

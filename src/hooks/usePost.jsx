@@ -7,16 +7,14 @@ export default function usePost(url, headers = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const postResource = async (data, isFormData = false) => {
+  const postResource = async (data) => {
     const token = localStorage.getItem("token");
     setLoading(true);
     setError(null);
     try {
-      const contentType = "multipart/form-data";
-
       const response = await axios.post(url, data, {
         headers: {
-          "Content-Type": contentType,
+          "Content-Type": "multipart/form-data",
           JWT: token,
           ...headers,
         },

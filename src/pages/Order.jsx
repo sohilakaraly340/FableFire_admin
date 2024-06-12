@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import useFetch from "../hooks/useFetch";
+import Page404 from "./Page404";
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
@@ -34,7 +35,7 @@ export default function Order() {
   }, [data]);
 
   if (error) {
-    return <p className="flex justify-center items-center w-[50%]">error</p>;
+    <Page404 />;
   }
 
   return (

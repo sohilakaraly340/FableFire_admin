@@ -4,6 +4,7 @@ import userIcon from "../assets/images/icons/ordersIcon.svg";
 import orderIcon from "../assets/images/icons/usersIcon.svg";
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
+import Page404 from "./Page404";
 
 export default function Dashboard() {
   const [newArrival, setNewArrival] = useState([]);
@@ -96,14 +97,12 @@ export default function Dashboard() {
   }, [items, orders]);
 
   if (error1 || error2) {
-    return (
-      <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
-    );
+    return <Page404 />;
   }
 
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
-      <p className="text-2xl font-bold px-8">Over View</p>
+      <p className="text-2xl font-bold">Over View</p>
 
       <div>
         <div className="flex flex-wrap justify-center gap-5 py-6">

@@ -7,6 +7,7 @@ import trash from "../assets/images/icons/trash.svg";
 import { Link } from "react-router-dom";
 import useDelete from "../hooks/useDelete";
 import PopUp from "../components/PopUp";
+import Page404 from "./Page404";
 
 export default function Authors() {
   const [authors, setAuthors] = useState([]);
@@ -68,9 +69,7 @@ export default function Authors() {
   }, [data]);
 
   if (error) {
-    return (
-      <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
-    );
+    return <Page404 />;
   }
 
   return (

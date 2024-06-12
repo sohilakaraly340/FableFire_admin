@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import useFetch from "../hooks/useFetch";
+import Page404 from "./Page404";
 
 export default function User() {
   const [users, setUsers] = useState([]);
@@ -31,9 +32,7 @@ export default function User() {
   }, [data]);
 
   if (error) {
-    return (
-      <p className="flex justify-center items-center w-[50%]">Ooops Error!</p>
-    );
+    return <Page404 />;
   }
 
   return (
