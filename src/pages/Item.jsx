@@ -67,11 +67,14 @@ export default function Item() {
         description: item.description,
         publicationDate: item.publicationDate,
         numOfPage: item.numOfPage,
-        itemType: item.itemType,
+        itemType: item.itemType.itemType,
         countInStock: item.countInStock,
         images: item.images,
         category: item.category.title,
         id: item._id,
+        duration: item.duration,
+        discount: item.discount,
+        authorId: item.authorId.name,
       }));
       setAllItem(extractedData);
     }

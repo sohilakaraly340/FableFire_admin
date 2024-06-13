@@ -22,6 +22,11 @@ const ValidationSchema = Yup.object({
     .positive("Must be a positive number")
     .integer("Must be an integer"),
   images: Yup.array().min(1, "At least one image is required"),
+  itemType: Yup.string().required("Required"),
+  category: Yup.string().required("Required"),
+  authorId: Yup.string().required("Required"),
+  discount: Yup.number(),
+  duration: Yup.number().required("Required"),
 });
 
 const createInputs = (data) => {
@@ -49,6 +54,21 @@ const createInputs = (data) => {
     { name: "publicationDate", title: "Publication Date", type: "date" },
     { name: "price", title: "Price", type: "number" },
     { name: "countInStock", title: "No of Stock", type: "number" },
+    {
+      name: "numOfPage",
+      title: "No of Pages",
+      type: "number",
+    },
+    {
+      name: "discount",
+      title: "Discount",
+      type: "number",
+    },
+    {
+      name: "duration",
+      title: "Duration",
+      type: "number",
+    },
     {
       name: "itemType",
       title: "Type",
