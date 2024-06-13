@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import FormHeader from "./FormHeader";
+import FormField from "./FormField";
+import ImageField from "./ImageField";
 import SelectInput from "./SelectInput";
-import imageIcon from "../assets/images/icons/imgeIcon.png";
 
 export default function FormCom({
   initialValues,
@@ -15,11 +17,7 @@ export default function FormCom({
   const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
-    if (
-      initialValues &&
-      initialValues.images &&
-      initialValues.images.length > 0
-    ) {
+    if (initialValues?.images?.length > 0) {
       setImagePreviews(initialValues.images);
     }
   }, [initialValues]);
@@ -48,88 +46,33 @@ export default function FormCom({
       onSubmit={submit}
     >
       {({ setFieldValue, values }) => (
-        <Form className="space-y-4">
-          <div className="flex justify-between items-center">
-            <p className="text-2xl font-bold md:px-8">
-              {mode === "add" ? `Add ${page}` : `Edit ${page}`}
-            </p>
-            {loading ? (
-              <button className="btn">
-                <span className="loading loading-spinner"></span>
-                loading
-              </button>
-            ) : (
-              <button
-                type="submit"
-                className="relative overflow-hidden bg-button hover:bg-[#907566] text-white py-3 px-9 rounded focus:outline-none"
-              >
-                {mode === "add" ? "Add" : "Save"}
-              </button>
-            )}
-          </div>
+        <Form>
+          <FormHeader mode={mode} page={page} loading={loading} />
 
           {inputs.map((field, index) => (
             <div key={index} className="md:px-20 py-8">
-              {field.type === "file" ? (
-                <div className="block w-full p-6 text-center border-[2px] border-button border-dashed rounded">
-                  <div className="flex space-x-2 justify-center">
-                    {imagePreviews.length > 0 ? (
-                      imagePreviews.map((preview, idx) => (
-                        <img
-                          key={idx}
-                          src={preview}
-                          alt={`Preview ${idx}`}
-                          className="h-[200px] w-[200px] object-cover"
-                        />
-                      ))
-                    ) : (
-                      <img src={imageIcon} alt="Upload Icon" />
-                    )}
-                  </div>
-                  <input
-                    id={field.name}
-                    name={field.name}
-                    type="file"
-                    className="hidden"
-                    multiple={field.multiple}
-                    onChange={(event) =>
-                      handleImageChange(event, setFieldValue)
-                    }
-                  />
-                  <label
-                    htmlFor={field.name}
-                    className="mt-3 block md:w-[30%] lg:w-[20%] mx-auto bg-button text-white p-2 rounded cursor-pointer text-center"
-                  >
-                    Upload Image
-                  </label>
-                </div>
-              ) : field.as === "select" ? (
+              {field.as === "select" ? (
                 <SelectInput
                   field={field}
                   values={values}
                   setFieldValue={setFieldValue}
                 />
+              ) : field.type === "file" ? (
+                <ImageField
+                  key={index}
+                  field={field}
+                  imagePreviews={imagePreviews}
+                  handleImageChange={handleImageChange}
+                  setFieldValue={setFieldValue}
+                />
               ) : (
-                <>
-                  <label
-                    htmlFor={field.name}
-                    className="block text-sm font-bold mb-2"
-                  >
-                    {field.title}
-                  </label>
-                  <Field
-                    name={field.name}
-                    type={field.type}
-                    as={field.type === "textarea" ? "textarea" : "input"}
-                    className="mt-1 block w-full p-2 border border-button rounded"
-                  />
-                </>
+                <FormField
+                  key={index}
+                  field={field}
+                  values={values}
+                  setFieldValue={setFieldValue}
+                />
               )}
-              <ErrorMessage
-                name={field.name}
-                component="div"
-                className="text-red-600 text-sm"
-              />
             </div>
           ))}
         </Form>

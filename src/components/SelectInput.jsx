@@ -3,14 +3,10 @@ import { Field, ErrorMessage } from "formik";
 
 const SelectField = ({ field, values, setFieldValue }) => {
   const currentOption = field.options.find(
-    (option) => option.value === values[field.name]
+    (option) => option.label === values[field.name]
   );
-  // const currentOption = field.options.map((option) => {
-  //   console.log(option.value, values[field.value]);
 
-  //   return option.value === values[field.name];
-  // });
-  // console.log(field, values);
+  console.log(currentOption);
 
   return (
     <>
@@ -24,19 +20,27 @@ const SelectField = ({ field, values, setFieldValue }) => {
         value={values[field.name] || ""}
         onChange={(event) => setFieldValue(field.name, event.target.value)}
       >
-        <option value="">Select {field.title}</option>
-        {currentOption && (
-          <option value={currentOption.value} selected>
-            {currentOption.label}
-          </option>
+        {currentOption ? (
+          <>
+            <option value={currentOption.value}>{currentOption.label}</option>
+            {field.options
+              .filter((option) => option.value !== currentOption.value)
+              .map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+          </>
+        ) : (
+          <>
+            <option value="">Select</option>
+            {field.options.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </>
         )}
-        {field.options
-          .filter((option) => option.value !== values[field.name])
-          .map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
       </Field>
       <ErrorMessage
         name={field.name}
