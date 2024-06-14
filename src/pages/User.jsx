@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import useFetch from "../hooks/useFetch";
 import Page404 from "./Page404";
+import Header from "../components/Header";
 
 export default function User() {
   const [users, setUsers] = useState([]);
@@ -37,9 +38,11 @@ export default function User() {
 
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
-      <div className="flex justify-between items-center ">
-        <p className="text-2xl font-bold px-8">All User</p>
-      </div>
+      <Header
+        title={"All Users"}
+        buttonText={"Add Admin"}
+        route="/Users/AddAdmin"
+      />
       <div className=" py-8">
         <Table columns={thead} data={users} loading={loading} />
       </div>
