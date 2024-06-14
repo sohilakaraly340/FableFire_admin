@@ -6,8 +6,6 @@ const SelectField = ({ field, values, setFieldValue }) => {
     (option) => option.label === values[field.name]
   );
 
-  console.log(currentOption);
-
   return (
     <>
       <label htmlFor={field.name} className="block text-sm font-bold mb-2">

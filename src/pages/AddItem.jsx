@@ -26,7 +26,7 @@ const ValidationSchema = Yup.object({
   category: Yup.string().required("Required"),
   authorId: Yup.string().required("Required"),
   discount: Yup.number(),
-  duration: Yup.number().required("Required"),
+  duration: Yup.number(),
 });
 
 const createInputs = (data) => {
@@ -50,7 +50,6 @@ const createInputs = (data) => {
     { name: "title", title: "Item Name", type: "text" },
     { name: "description", title: "Description", type: "textarea" },
     { name: "images", title: "Images", type: "file", multiple: true },
-    { name: "numOfPage", title: "No. of Pages", type: "number" },
     { name: "publicationDate", title: "Publication Date", type: "date" },
     { name: "price", title: "Price", type: "number" },
     { name: "countInStock", title: "No of Stock", type: "number" },
@@ -58,16 +57,19 @@ const createInputs = (data) => {
       name: "numOfPage",
       title: "No of Pages",
       type: "number",
+      value: 0,
     },
     {
       name: "discount",
       title: "Discount",
       type: "number",
+      value: 0,
     },
     {
       name: "duration",
       title: "Duration",
       type: "number",
+      value: 0,
     },
     {
       name: "itemType",

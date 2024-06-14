@@ -3,7 +3,7 @@ import { Field, ErrorMessage } from "formik";
 
 export default function FormField({ field, values, setFieldValue }) {
   return (
-    <div>
+    <>
       <label htmlFor={field.name} className="block text-sm font-bold mb-2">
         {field.title}
       </label>
@@ -19,6 +19,6 @@ export default function FormField({ field, values, setFieldValue }) {
         component="div"
         className="text-red-600 text-sm"
       />
-    </div>
+    </>
   );
 }
