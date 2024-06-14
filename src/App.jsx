@@ -15,6 +15,7 @@ import Page404 from "./pages/Page404";
 import SignIn from "./pages/SignIn";
 import ItemType from "./pages/ItemType";
 import AddItemType from "./pages/AddItemType";
+import AddAdmin from "./pages/AddAdmin";
 function App() {
   const location = useLocation();
   const hideSidebarRoutes = ["/"];
@@ -35,6 +36,10 @@ function App() {
           element={<PrivateRoute element={<Dashboard />} />}
         />
         <Route path="/Users" element={<PrivateRoute element={<User />} />} />
+        <Route
+          path="/Users/AddAdmin"
+          element={<PrivateRoute element={<AddAdmin mode="add" />} />}
+        />
         <Route path="/Orders" element={<PrivateRoute element={<Order />} />} />
         <Route path="/Items" element={<PrivateRoute element={<Item />} />} />
         <Route

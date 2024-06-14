@@ -16,6 +16,8 @@ export default function FormCom({
 }) {
   const [imagePreviews, setImagePreviews] = useState([]);
 
+  // console.log(initialValues);
+
   useEffect(() => {
     if (initialValues?.images?.length > 0) {
       setImagePreviews(initialValues.images);
@@ -50,7 +52,7 @@ export default function FormCom({
           <FormHeader mode={mode} page={page} loading={loading} />
 
           {inputs.map((field, index) => (
-            <div key={index} className="md:px-20 py-8">
+            <div key={index} className=" md:px-20 py-8">
               {field.as === "select" ? (
                 <SelectInput
                   field={field}
