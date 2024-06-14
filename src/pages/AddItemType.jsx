@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import usePost from "../hooks/usePost";
-import usePatch from "../hooks/usePatch";
 import * as Yup from "yup";
 import FormCom from "../components/FormCom";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const ValidationSchema = Yup.object({
   itemType: Yup.string().required("Required"),
@@ -14,30 +14,50 @@ const inputs = [{ name: "itemType", title: "Item Type", type: "text" }];
 export default function AddItemType({ mode, initialValues = {} }) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("token");
 
   if (location.state && location.state.fromEdit) {
     initialValues = location.state.fromEdit.row;
   }
 
-  const { postResource, loading: postLoading } = usePost(
-    "http://localhost:3005/api/v1/admin/itemType"
-  );
-
-  const { patchResource, loading: patchLoading } = usePatch(
-    "http://localhost:3005/api/v1/admin/itemType"
-  );
-
   const submit = async (values) => {
-    const formData = new FormData();
-    formData.append("itemType", values.itemType);
-
-    let res;
     if (mode === "edit") {
-      res = await patchResource(values.id, formData);
+      try {
+        setLoading(true);
+        await axios.patch(
+          `http://localhost:3005/api/v1/admin/itemType/${values.id}`,
+          values,
+          {
+            headers: {
+              JWT: token,
+            },
+          }
+        );
+        toast.success("updated successfully!");
+        navigate("/ItemTypes");
+      } catch (error) {
+        toast.error(`Error : ${error.response.data.message}`);
+      }
     } else {
-      res = await postResource(formData);
+      try {
+        setLoading(true);
+        await axios.post(
+          "http://localhost:3005/api/v1/admin/itemType",
+          values,
+          {
+            headers: {
+              JWT: token,
+            },
+          }
+        );
+        toast.success("created successfully!");
+        navigate("/ItemTypes");
+      } catch (error) {
+        toast.error(`Error : ${error.response.data.message}`);
+      }
     }
-    // navigate("/ItemTypes");
+    setLoading(false);
   };
 
   return (
@@ -47,7 +67,7 @@ export default function AddItemType({ mode, initialValues = {} }) {
         ValidationSchema={ValidationSchema}
         initialValues={initialValues}
         inputs={inputs}
-        loading={postLoading || patchLoading}
+        loading={loading}
         mode={mode}
         page="Item Type"
       />
