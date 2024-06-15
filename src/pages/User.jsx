@@ -16,12 +16,12 @@ export default function User() {
   ];
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/admin/user"
+    "http://localhost:3005/api/v1/admin/user?page=1&limit=4"
   );
 
   useEffect(() => {
     if (data) {
-      const extractedData = data.data.map((user) => ({
+      const extractedData = data.data.results.map((user) => ({
         firstName: user.firstName,
         email: user.email,
         address: user.address,

@@ -62,8 +62,8 @@ export default function Dashboard() {
   useEffect(() => {
     const updatedBoxs = [...boxs];
     if (items) {
-      updatedBoxs[0].count = items.data.length;
-      const lastTwo = items.data.reverse().slice(0, 2);
+      updatedBoxs[0].count = items.data.results.length;
+      const lastTwo = items.data.results.reverse().slice(0, 2);
       const extractedData = lastTwo.map((item) => ({
         title: item.title,
         price: item.price,
@@ -75,8 +75,8 @@ export default function Dashboard() {
     }
 
     if (orders) {
-      updatedBoxs[1].count = orders.data.length;
-      const lastTwo = orders.data.reverse().slice(0, 2);
+      updatedBoxs[1].count = orders.data.results.length;
+      const lastTwo = orders.data.results.reverse().slice(0, 2);
       const extractedData = lastTwo.map((order) => ({
         id: order._id,
         firstName: order.firstName,
@@ -90,7 +90,7 @@ export default function Dashboard() {
     }
 
     if (users) {
-      updatedBoxs[2].count = users.data.length;
+      updatedBoxs[2].count = users.data.results.length;
     }
 
     setBoxs(updatedBoxs);

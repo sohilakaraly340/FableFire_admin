@@ -16,12 +16,12 @@ export default function Order() {
   ];
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/admin/order"
+    "http://localhost:3005/api/v1/admin/order?page=1&limit=4"
   );
 
   useEffect(() => {
     if (data) {
-      const extractedData = data.data.map((order) => ({
+      const extractedData = data.data.results.map((order) => ({
         id: order._id,
         firstName: order.firstName,
         email: order.email,
