@@ -6,6 +6,8 @@ import catIcon from "../assets/images/icons/catIcon.svg";
 import itemIcon from "../assets/images/icons/itemIcon.svg";
 import orderIcon from "../assets/images/icons/orderIcon.svg";
 import userIcon from "../assets/images/icons/userIcon.svg";
+import eventIcon from "../assets/images/icons/eventIcon.svg";
+
 import { NavLink, useLocation } from "react-router-dom";
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -25,6 +27,7 @@ const Sidebar = () => {
     { name: "Users", icon: userIcon },
     { name: "Orders", icon: orderIcon },
     { name: "Authors", icon: authorIcon },
+    { name: "Events", icon: eventIcon },
     { name: "ItemTypes", icon: itemIcon },
   ];
 

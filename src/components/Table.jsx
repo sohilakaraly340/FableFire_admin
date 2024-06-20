@@ -5,6 +5,7 @@ export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
   const [selectedRole, setSelectedRole] = useState({});
 
+  console.log(data);
   const { patchResource } = usePatch(
     "http://localhost:3005/api/v1/admin/order"
   );

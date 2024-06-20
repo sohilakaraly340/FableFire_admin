@@ -16,6 +16,8 @@ import SignIn from "./pages/SignIn";
 import ItemType from "./pages/ItemType";
 import AddItemType from "./pages/AddItemType";
 import AddAdmin from "./pages/AddAdmin";
+import Event from "./pages/Event";
+import AddEvent from "./pages/AddEvent";
 function App() {
   const location = useLocation();
   const hideSidebarRoutes = ["/"];
@@ -41,6 +43,16 @@ function App() {
           element={<PrivateRoute element={<AddAdmin mode="add" />} />}
         />
         <Route path="/Orders" element={<PrivateRoute element={<Order />} />} />
+        <Route path="Events" element={<PrivateRoute element={<Event />} />} />
+        <Route
+          path="/Events/AddEvent"
+          element={<PrivateRoute element={<AddEvent mode="add" />} />}
+        />
+        <Route
+          path="/Events/EditEvent"
+          element={<PrivateRoute element={<AddEvent mode="edit" />} />}
+        />
+
         <Route path="/Items" element={<PrivateRoute element={<Item />} />} />
         <Route
           path="/Items/AddItem"
