@@ -55,13 +55,13 @@ export default function Item() {
   );
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/item",
+    "http://localhost:3005/api/v1/item?page=1&limit=4",
     {}
   );
 
   useEffect(() => {
     if (data) {
-      const extractedData = data.data.map((item) => ({
+      const extractedData = data.data.results.map((item) => ({
         title: item.title,
         price: item.price,
         description: item.description,
