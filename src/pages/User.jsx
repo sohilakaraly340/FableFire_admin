@@ -27,6 +27,7 @@ export default function User() {
         address: user.address,
         phoneNumber: user.phoneNumber,
         role: user.role,
+        id: user._id,
       }));
       setUsers(extractedData);
     }
