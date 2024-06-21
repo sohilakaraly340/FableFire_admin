@@ -18,10 +18,13 @@ import AddItemType from "./pages/AddItemType";
 import AddAdmin from "./pages/AddAdmin";
 import Event from "./pages/Event";
 import AddEvent from "./pages/AddEvent";
+import Otp from "./components/Otp";
+import SignUp from "./pages/SignUp";
 function App() {
   const location = useLocation();
-  const hideSidebarRoutes = ["/"];
+  const hideSidebarRoutes = ["/", "/verifyOtp", "/signUp"];
   const token = localStorage.getItem("token");
+  const verfied = localStorage.getItem("verfied");
   const shouldHideSidebar = hideSidebarRoutes.includes(location.pathname);
 
   return (
@@ -33,6 +36,7 @@ function App() {
           path="/"
           element={!token ? <SignIn /> : <Navigate to="/Dashboard" />}
         />
+        <Route path="/signUp" element={!token && verfied && <SignUp />} />
         <Route
           path="/Dashboard"
           element={<PrivateRoute element={<Dashboard />} />}
@@ -100,6 +104,7 @@ function App() {
           path="/Authors/EditAuthor"
           element={<PrivateRoute element={<AddAuthor mode="edit" />} />}
         />
+        <Route path="verifyOtp" element={<Otp />} />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </>
