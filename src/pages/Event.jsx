@@ -17,8 +17,8 @@ export default function Event() {
   const thead = [
     { header: "Image", accessor: "images" },
     { header: "Name", accessor: "name" },
-    { header: "Date", accessor: "date" },
     { header: "Location", accessor: "location" },
+    { header: "Date", accessor: "date" },
     {
       header: "Actions",
       render: (row) => (
