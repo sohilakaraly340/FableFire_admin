@@ -8,11 +8,15 @@ import { Link } from "react-router-dom";
 import useDelete from "../hooks/useDelete";
 import PopUp from "../components/PopUp";
 import Page404 from "./Page404";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 export default function Item() {
   const [allItem, setAllItem] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
 
   const thead = [
     { header: "Image", accessor: "images" },
@@ -55,34 +59,60 @@ export default function Item() {
   );
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/item?page=1&limit=4",
-    {}
+    "http://localhost:3005/api/v1/item?page=1&limit=4"
   );
+
+  const mapItemData = (items) =>
+    items.map((item) => ({
+      title: item.title,
+      price: item.price,
+      description: item.description,
+      publicationDate: item.publicationDate,
+      numOfPage: item.numOfPage,
+      itemType: item.itemType.itemType,
+      countInStock: item.countInStock,
+      images: item.images,
+      category: item.category.title,
+      id: item._id,
+      duration: item.duration,
+      discount: item.discount,
+      authorId: item.authorId.name,
+    }));
 
   useEffect(() => {
     if (data) {
-      const extractedData = data.data.results.map((item) => ({
-        title: item.title,
-        price: item.price,
-        description: item.description,
-        publicationDate: item.publicationDate,
-        numOfPage: item.numOfPage,
-        itemType: item.itemType.itemType,
-        countInStock: item.countInStock,
-        images: item.images,
-        category: item.category.title,
-        id: item._id,
-        duration: item.duration,
-        discount: item.discount,
-        authorId: item.authorId.name,
-      }));
-      setAllItem(extractedData);
+      setAllItem(mapItemData(data.data.results));
     }
   }, [data]);
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (searchTerm) {
+        try {
+          const { data } = await axios.get(
+            `http://localhost:3005/api/v1/item/search/${searchTerm}`
+          );
+          setSearchResults(mapItemData(data.data.itemsByTitle));
+        } catch (error) {
+          toast.error(`Error fetching : ${err.response.data.message}`);
+        }
+      } else {
+        setSearchResults([]);
+      }
+    };
+
+    fetchSearchResults();
+  }, [searchTerm]);
 
   if (error) {
     return <Page404 />;
   }
+
+  const displayedItems = searchTerm ? searchResults : allItem;
 
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
@@ -90,9 +120,11 @@ export default function Item() {
         title={"All Items"}
         buttonText={"Add Item"}
         route="/Items/AddItem"
+        handleSearch={handleSearch}
+        searchTerm={searchTerm}
       />
-      <div className=" py-8">
-        <Table columns={thead} data={allItem} loading={loading} />
+      <div className="py-8">
+        <Table columns={thead} data={displayedItems} loading={loading} />
       </div>
       {showDeleteModal && (
         <PopUp

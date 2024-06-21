@@ -3,14 +3,9 @@ import usePatch from "../hooks/usePatch";
 
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
-  const [selectedRole, setSelectedRole] = useState({});
 
   const { patchResource } = usePatch(
     "http://localhost:3005/api/v1/admin/order"
-  );
-
-  const { patchResource: patchUser } = usePatch(
-    "http://localhost:3005/api/v1/User"
   );
 
   const handleStatusChange = async (event, rowIndex, id) => {
@@ -21,16 +16,6 @@ export default function Table({ columns, data, loading }) {
     }));
 
     await patchResource(id, { status: value });
-  };
-
-  const handleRoleChange = async (event, rowIndex, id) => {
-    const { value } = event.target;
-    setSelectedRole((prevState) => ({
-      ...prevState,
-      [rowIndex]: value,
-    }));
-    console.log(value, rowIndex, id);
-    await patchUser(id, { role: value });
   };
 
   return (
@@ -78,15 +63,6 @@ export default function Table({ columns, data, loading }) {
                         <option value="Pending">Pending</option>
                         <option value="Canceled">Canceled</option>
                         <option value="Accepted">Accepted</option>
-                      </select>
-                    ) : column.accessor === "role" ? (
-                      <select
-                        value={selectedRole[rowIndex] || cellData}
-                        onChange={(e) => handleRoleChange(e, rowIndex, row.id)}
-                        className={`p-2 w-28 text-center m-auto border border-none rounded-lg `}
-                      >
-                        <option value="admin">Admin</option>
-                        <option value="user">User</option>
                       </select>
                     ) : column.accessor === "images" ? (
                       <img
