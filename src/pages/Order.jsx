@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import Table from "../components/Table";
 import useFetch from "../hooks/useFetch";
 import Page404 from "./Page404";
+import Pagination from "../components/Pagination";
 
 export default function Order() {
   const [orders, setOrders] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 6;
 
   const thead = [
     { header: "First Name", accessor: "firstName" },
@@ -16,7 +20,7 @@ export default function Order() {
   ];
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/admin/order?page=1&limit=4"
+    `http://localhost:3005/api/v1/admin/order?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {
@@ -31,12 +35,16 @@ export default function Order() {
         status: order.status,
       }));
       setOrders(extractedData);
+      setTotalPages(data.data.numOfPages);
     }
-  }, [data]);
+  }, [data, currentPage]);
 
   if (error) {
     <Page404 />;
   }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
@@ -46,6 +54,11 @@ export default function Order() {
       <div className="py-8">
         <Table columns={thead} data={orders} loading={loading} />
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }

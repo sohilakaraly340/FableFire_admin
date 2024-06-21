@@ -63,21 +63,21 @@ export default function Dashboard() {
     const updatedBoxs = [...boxs];
     if (items) {
       updatedBoxs[0].count = items.data.results.length;
-      const lastTwo = items.data.results.reverse().slice(0, 2);
-      const extractedData = lastTwo.map((item) => ({
+      const lastTwoItems = items.data.results.slice(-2);
+      const extractedItemData = lastTwoItems.map((item) => ({
         title: item.title,
         price: item.price,
         countInStock: item.countInStock,
         images: item.images,
         category: item.category.title,
       }));
-      setNewArrival(extractedData);
+      setNewArrival(extractedItemData);
     }
 
     if (orders) {
       updatedBoxs[1].count = orders.data.results.length;
-      const lastTwo = orders.data.results.reverse().slice(0, 2);
-      const extractedData = lastTwo.map((order) => ({
+      const lastTwoOrders = orders.data.results.slice(-2);
+      const extractedOrderData = lastTwoOrders.map((order) => ({
         id: order._id,
         firstName: order.firstName,
         email: order.email,
@@ -86,15 +86,16 @@ export default function Dashboard() {
         totalPrice: order.totalPrice,
         status: order.status,
       }));
-      setNewOrders(extractedData);
+      setNewOrders(extractedOrderData);
     }
 
     if (users) {
+      console.log(users);
       updatedBoxs[2].count = users.data.results.length;
     }
 
     setBoxs(updatedBoxs);
-  }, [items, orders]);
+  }, [items, orders, users]);
 
   if (error1 || error2) {
     return <Page404 />;

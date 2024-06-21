@@ -10,6 +10,7 @@ import PopUp from "../components/PopUp";
 import Page404 from "./Page404";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Pagination from "../components/Pagination";
 
 export default function Item() {
   const [allItem, setAllItem] = useState([]);
@@ -17,6 +18,10 @@ export default function Item() {
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 3;
 
   const thead = [
     { header: "Image", accessor: "images" },
@@ -59,7 +64,7 @@ export default function Item() {
   );
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/item?page=1&limit=4"
+    `http://localhost:3005/api/v1/item?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   const mapItemData = (items) =>
@@ -82,8 +87,9 @@ export default function Item() {
   useEffect(() => {
     if (data) {
       setAllItem(mapItemData(data.data.results));
+      setTotalPages(data.data.numOfPages);
     }
-  }, [data]);
+  }, [data, currentPage]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -94,9 +100,11 @@ export default function Item() {
       if (searchTerm) {
         try {
           const { data } = await axios.get(
-            `http://localhost:3005/api/v1/item/search/${searchTerm}`
+            `http://localhost:3005/api/v1/item/search/${searchTerm}?page=${currentPage}&limit=${itemsPerPage}`
           );
+          console.log(data);
           setSearchResults(mapItemData(data.data.itemsByTitle));
+          setTotalPages(data.data.numOfPages);
         } catch (error) {
           toast.error(`Error fetching : ${err.response.data.message}`);
         }
@@ -106,11 +114,14 @@ export default function Item() {
     };
 
     fetchSearchResults();
-  }, [searchTerm]);
+  }, [searchTerm, totalPages, currentPage]);
 
   if (error) {
     return <Page404 />;
   }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const displayedItems = searchTerm ? searchResults : allItem;
 
@@ -133,6 +144,11 @@ export default function Item() {
           loading={loadingDelete}
         />
       )}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }
