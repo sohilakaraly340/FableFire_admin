@@ -8,12 +8,15 @@ import { Link } from "react-router-dom";
 import useDelete from "../hooks/useDelete";
 import PopUp from "../components/PopUp";
 import Page404 from "./Page404";
+import Pagination from "../components/Pagination";
 
 export default function Authors() {
   const [authors, setAuthors] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteItemId, setDeleteItemId] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 3;
   const thead = [
     { header: "Image", accessor: "images" },
     { header: "Name", accessor: "name" },
@@ -53,25 +56,28 @@ export default function Authors() {
   );
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/author/"
+    `http://localhost:3005/api/v1/author?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {
     if (data) {
-      const extractedData = data.data.map((author) => ({
+      const extractedData = data.data.results.map((author) => ({
         name: author.name,
         description: author.description,
         images: author.images,
         id: author._id,
       }));
       setAuthors(extractedData);
+      setTotalPages(data.data.totalPages);
     }
   }, [data]);
 
   if (error) {
     return <Page404 />;
   }
-
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <Header
@@ -87,6 +93,13 @@ export default function Authors() {
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
           loading={loadingDelete}
+        />
+      )}
+      {authors.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

@@ -8,12 +8,15 @@ import edit from "../assets/images/icons/edit.svg";
 import trash from "../assets/images/icons/trash.svg";
 import PopUp from "../components/PopUp";
 import Page404 from "./Page404";
+import Pagination from "../components/Pagination";
 
 export default function Event() {
   const [event, setEvent] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteEventId, setDeleteEventId] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 3;
   const thead = [
     { header: "Image", accessor: "images" },
     { header: "Name", accessor: "name" },
@@ -54,12 +57,12 @@ export default function Event() {
   );
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/event"
+    `http://localhost:3005/api/v1/event?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {
     if (data) {
-      const extractedData = data.data.map((event) => ({
+      const extractedData = data.data.results.map((event) => ({
         name: event.name,
         description: event.description,
         images: event.images,
@@ -69,12 +72,16 @@ export default function Event() {
         numOfTickets: event.numOfTickets,
       }));
       setEvent(extractedData);
+      setTotalPages(data.data.numOfPages);
     }
   }, [data]);
 
   if (error) {
     return <Page404 />;
   }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
@@ -91,6 +98,13 @@ export default function Event() {
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
           loading={loadingDelete}
+        />
+      )}
+      {event.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
       )}
     </div>
