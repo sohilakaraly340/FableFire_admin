@@ -37,7 +37,7 @@ export default function useGet(url, headers = {}) {
     };
 
     fetchData();
-  }, []);
+  }, [url]);
 
   return { data, loading, error };
 }

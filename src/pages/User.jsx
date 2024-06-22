@@ -3,9 +3,13 @@ import Table from "../components/Table";
 import useFetch from "../hooks/useFetch";
 import Page404 from "./Page404";
 import Header from "../components/Header";
+import Pagination from "../components/Pagination";
 
 export default function User() {
   const [users, setUsers] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 10;
 
   const thead = [
     { header: "Name", accessor: "firstName" },
@@ -16,7 +20,7 @@ export default function User() {
   ];
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/admin/user?page=1&limit=4"
+    `http://localhost:3005/api/v1/admin/user?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {
@@ -30,12 +34,17 @@ export default function User() {
         id: user._id,
       }));
       setUsers(extractedData);
+      setTotalPages(data.data.numOfPages);
     }
-  }, [data]);
+  }, [data, currentPage]);
 
   if (error) {
     return <Page404 />;
   }
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
@@ -47,6 +56,11 @@ export default function User() {
       <div className=" py-8">
         <Table columns={thead} data={users} loading={loading} />
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </div>
   );
 }
