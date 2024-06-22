@@ -3,7 +3,7 @@ import usePatch from "../hooks/usePatch";
 
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
-
+  console.log(data);
   const { patchResource } = usePatch(
     "http://localhost:3005/api/v1/admin/order"
   );
