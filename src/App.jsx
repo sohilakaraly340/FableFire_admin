@@ -20,6 +20,7 @@ import Event from "./pages/Event";
 import AddEvent from "./pages/AddEvent";
 import Otp from "./components/Otp";
 import SignUp from "./pages/SignUp";
+import Reviews from "./pages/Reviews";
 function App() {
   const location = useLocation();
   const hideSidebarRoutes = ["/", "/verifyOtp", "/signUp"];
@@ -105,6 +106,10 @@ function App() {
           element={<PrivateRoute element={<AddAuthor mode="edit" />} />}
         />
         <Route path="verifyOtp" element={<Otp />} />
+        <Route
+          path="/Reviews"
+          element={<PrivateRoute element={<Reviews />} />}
+        />
         <Route path="*" element={<Page404 />} />
       </Routes>
     </>
