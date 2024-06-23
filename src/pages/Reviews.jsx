@@ -5,12 +5,15 @@ import useDelete from "../hooks/useDelete";
 import trash from "../assets/images/icons/trash.svg";
 import PopUp from "../components/PopUp";
 import Page404 from "./Page404";
+import Pagination from "../components/Pagination";
 
 export default function Reviews() {
   const [reviews, setReviews] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteReviewId, setDeleteReviewId] = useState(null);
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 2;
   const thead = [
     {
       header: "Product",
@@ -62,12 +65,12 @@ export default function Reviews() {
   );
 
   const { data, loading, error } = useFetch(
-    "http://localhost:3005/api/v1/review"
+    `http://localhost:3005/api/v1/review?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {
     if (data) {
-      const extractedData = data.Reviews.map((review) => ({
+      const extractedData = data.Reviews.results.map((review) => ({
         itemName: review.item.title,
         itemImage: review.item.images[0],
         userName: review.user.firstName,
@@ -76,12 +79,16 @@ export default function Reviews() {
         id: review._id,
       }));
       setReviews(extractedData);
+      setTotalPages(data.numOfPages);
     }
   }, [data]);
 
   if (error) {
     return <Page404 />;
   }
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <div className="flex justify-between items-center ">
@@ -95,6 +102,13 @@ export default function Reviews() {
           onDelete={handleDelete}
           onCancel={() => setShowDeleteModal(false)}
           loading={loadingDelete}
+        />
+      )}
+      {reviews.length > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
         />
       )}
     </div>

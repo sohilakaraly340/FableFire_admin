@@ -4,7 +4,6 @@ import CurrencyConverter from "./CurrencyConverter";
 
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
-  console.log(data);
   const { patchResource } = usePatch(
     "http://localhost:3005/api/v1/admin/order"
   );
@@ -17,6 +16,64 @@ export default function Table({ columns, data, loading }) {
     }));
 
     await patchResource(id, { status: value });
+  };
+
+  const renderCellData = (column, row, rowIndex) => {
+    const cellData = row[column.accessor];
+
+    if (column.accessor === "status") {
+      return (
+        <select
+          value={selectedStatus[rowIndex] || cellData}
+          onChange={(e) => handleStatusChange(e, rowIndex, row.id)}
+          className="p-2 w-28 text-center m-auto border border-none rounded-lg"
+        >
+          <option value="Pending">Pending</option>
+          <option value="Canceled">Canceled</option>
+          <option value="Accepted">Accepted</option>
+        </select>
+      );
+    }
+
+    if (column.accessor === "images") {
+      return (
+        <img
+          src={`${cellData[0]}`}
+          className="w-[150px] md:w-[60%]  m-auto"
+          alt="image"
+        />
+      );
+    }
+
+    if (column.accessor === "price" || column.accessor === "totalPrice") {
+      return (
+        <div className="flex items-center justify-center">
+          <CurrencyConverter price={row.price || row.totalPrice}>
+            {({ localPrice, currency }) => (
+              <>
+                <span>{localPrice}</span>
+                <span className="ml-1">{currency}</span>
+              </>
+            )}
+          </CurrencyConverter>
+        </div>
+      );
+    }
+
+    if (column.accessor === "date") {
+      const date = new Date(cellData);
+      const formattedDateTime = date.toLocaleString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      });
+
+      return formattedDateTime;
+    }
+
+    return cellData;
   };
 
   return (
@@ -49,50 +106,13 @@ export default function Table({ columns, data, loading }) {
           ) : (
             data?.map((row, rowIndex) => (
               <tr key={rowIndex}>
-                {columns.map((column, colIndex) => {
-                  const cellData = row[column.accessor];
-
-                  const renderedData =
-                    column.accessor === "status" ? (
-                      <select
-                        value={selectedStatus[rowIndex] || cellData}
-                        onChange={(e) =>
-                          handleStatusChange(e, rowIndex, row.id)
-                        }
-                        className={`p-2 w-28 text-center m-auto border border-none rounded-lg `}
-                      >
-                        <option value="Pending">Pending</option>
-                        <option value="Canceled">Canceled</option>
-                        <option value="Accepted">Accepted</option>
-                      </select>
-                    ) : column.accessor === "images" ? (
-                      <img
-                        src={`${cellData[0]}`}
-                        className="w-[150px] md:w-[60%]  m-auto"
-                        alt="image"
-                      />
-                    ) : column.accessor === "price" ||
-                      column.accessor === "totalPrice" ? (
-                      <div className="flex items-center justify-center">
-                        <CurrencyConverter price={row.price || row.totalPrice}>
-                          {({ localPrice, currency }) => (
-                            <>
-                              <span>{localPrice}</span>
-                              <span className="ml-1">{currency}</span>
-                            </>
-                          )}
-                        </CurrencyConverter>
-                      </div>
-                    ) : (
-                      cellData
-                    );
-
-                  return (
-                    <td key={colIndex} className="w-[200px]">
-                      {column.render ? column.render(row) : renderedData}
-                    </td>
-                  );
-                })}
+                {columns.map((column, colIndex) => (
+                  <td key={colIndex} className="w-[200px]">
+                    {column.render
+                      ? column.render(row)
+                      : renderCellData(column, row, rowIndex)}
+                  </td>
+                ))}
               </tr>
             ))
           )}
