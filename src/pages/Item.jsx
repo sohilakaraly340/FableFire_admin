@@ -18,7 +18,6 @@ export default function Item() {
   const [deleteItemId, setDeleteItemId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 3;
@@ -62,7 +61,6 @@ export default function Item() {
   const { deleteResource, loading: loadingDelete } = useDelete(
     "http://localhost:3005/api/v1/admin/item"
   );
-
   const { data, loading, error } = useFetch(
     `http://localhost:3005/api/v1/item?page=${currentPage}&limit=${itemsPerPage}`
   );
@@ -102,11 +100,10 @@ export default function Item() {
           const { data } = await axios.get(
             `http://localhost:3005/api/v1/item/search/${searchTerm}?page=${currentPage}&limit=${itemsPerPage}`
           );
-          console.log(data);
           setSearchResults(mapItemData(data.data.itemsByTitle));
           setTotalPages(data.data.numOfPages);
         } catch (error) {
-          toast.error(`Error fetching : ${err.response.data.message}`);
+          toast.error(`Error fetching : ${error.response.data.message}`);
         }
       } else {
         setSearchResults([]);

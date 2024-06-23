@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import usePatch from "../hooks/usePatch";
+import CurrencyConverter from "./CurrencyConverter";
 
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
@@ -70,6 +71,18 @@ export default function Table({ columns, data, loading }) {
                         className="w-[150px] md:w-[60%]  m-auto"
                         alt="image"
                       />
+                    ) : column.accessor === "price" ||
+                      column.accessor === "totalPrice" ? (
+                      <div className="flex items-center justify-center">
+                        <CurrencyConverter price={row.price || row.totalPrice}>
+                          {({ localPrice, currency }) => (
+                            <>
+                              <span>{localPrice}</span>
+                              <span className="ml-1">{currency}</span>
+                            </>
+                          )}
+                        </CurrencyConverter>
+                      </div>
                     ) : (
                       cellData
                     );
