@@ -61,7 +61,6 @@ export default function Category() {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       const extractedData = data.data.results.map((cat) => ({
         title: cat.title,
         description: cat.description,

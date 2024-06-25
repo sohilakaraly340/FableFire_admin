@@ -7,24 +7,31 @@ export default function usePatch(url, headers = {}) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const patchResource = async (id, data) => {
+  const patchResource = async (
+    id,
+    data,
+    contentType = "multipart/form-data"
+  ) => {
     const token = localStorage.getItem("token");
     setLoading(true);
     setError(null);
+    const headersWithContentType = {
+      "Content-Type": contentType,
+      JWT: token,
+      ...headers,
+    };
+
     try {
       const response = await axios.patch(`${url}/${id}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          JWT: token,
-          ...headers,
-        },
+        headers: headersWithContentType,
       });
 
+      console.log(response.data);
       toast.success("Updated successfully!");
       return response.data;
     } catch (err) {
       setError(err);
-      toast.error(`Error Updating : ${err.response.data.message}`);
+      toast.error(`Error Updating: ${err.response.data.message}`);
     } finally {
       setLoading(false);
     }

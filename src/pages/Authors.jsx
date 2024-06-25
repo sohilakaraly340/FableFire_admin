@@ -68,7 +68,7 @@ export default function Authors() {
         id: author._id,
       }));
       setAuthors(extractedData);
-      setTotalPages(data.data.totalPages);
+      setTotalPages(data.data.numOfPages);
     }
   }, [data]);
 

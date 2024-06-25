@@ -26,12 +26,12 @@ export default function User() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.results.map((user) => ({
-        firstName: user.firstName,
-        email: user.email,
-        address: user.address,
-        phoneNumber: user.phoneNumber,
-        role: user.role,
-        id: user._id,
+        firstName: user?.firstName,
+        email: user?.email,
+        address: user?.address,
+        phoneNumber: user?.phoneNumber,
+        role: user?.role,
+        id: user?._id,
       }));
       setUsers(extractedData);
       setTotalPages(data.data.numOfPages);

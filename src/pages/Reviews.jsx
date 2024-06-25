@@ -71,15 +71,15 @@ export default function Reviews() {
   useEffect(() => {
     if (data) {
       const extractedData = data.Reviews.results.map((review) => ({
-        itemName: review.item.title,
-        itemImage: review.item.images[0],
-        userName: review.user.firstName,
-        userImage: review.user.images[0],
-        review: review.review,
+        itemName: review?.item?.title,
+        itemImage: review?.item?.images,
+        userName: review?.user?.firstName,
+        userImage: review?.user?.images,
+        review: review?.review,
         id: review._id,
       }));
       setReviews(extractedData);
-      setTotalPages(data.numOfPages);
+      setTotalPages(data.Reviews.numOfPages);
     }
   }, [data]);
 
@@ -92,7 +92,7 @@ export default function Reviews() {
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <div className="flex justify-between items-center ">
-        <p className="text-2xl font-bold px-8">All Reviews</p>
+        <p className="text-2xl font-bold">All Reviews</p>
       </div>
       <div className="py-8">
         <Table columns={thead} data={reviews} loading={loading} />
