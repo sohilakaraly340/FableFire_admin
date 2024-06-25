@@ -87,7 +87,7 @@ export default function UsedItems() {
   return (
     <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <div className="flex justify-between items-center ">
-        <p className="text-2xl font-bold px-8">All Used Items</p>
+        <p className="text-2xl font-bold ">All Used Items</p>
       </div>
       <div className="py-8">
         <Table columns={thead} data={usedItems} loading={loading} />

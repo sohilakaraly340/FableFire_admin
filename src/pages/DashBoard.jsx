@@ -5,10 +5,12 @@ import orderIcon from "../assets/images/icons/usersIcon.svg";
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import Page404 from "./Page404";
+import eventIcon from "../assets/images/icons/eventIcon.svg";
 
 export default function Dashboard() {
   const [newArrival, setNewArrival] = useState([]);
   const [newOrders, setNewOrders] = useState([]);
+  const [newEvents, setNewEvents] = useState([]);
   const [boxs, setBoxs] = useState([
     {
       title: "All Items",
@@ -23,6 +25,7 @@ export default function Dashboard() {
       color: "#FDE2E1",
     },
     { title: "Our Users", count: 0, icon: userIcon, color: "#FEDFAC" },
+    { title: "Our events", count: 0, icon: eventIcon, color: "#FAF2F2" },
   ]);
 
   const thead1 = [
@@ -42,6 +45,13 @@ export default function Dashboard() {
     { header: "Status", accessor: "status" },
   ];
 
+  const thead3 = [
+    { header: "Image", accessor: "images" },
+    { header: "Name", accessor: "name" },
+    { header: "Location", accessor: "location" },
+    { header: "Date", accessor: "date" },
+  ];
+
   const {
     data: items,
     loading: loading1,
@@ -58,6 +68,12 @@ export default function Dashboard() {
     loading: loading3,
     error: error3,
   } = useFetch("http://localhost:3005/api/v1/admin/user");
+
+  const {
+    data: events,
+    loading: loading4,
+    error: error4,
+  } = useFetch("http://localhost:3005/api/v1/event");
 
   useEffect(() => {
     const updatedBoxs = [...boxs];
@@ -90,12 +106,26 @@ export default function Dashboard() {
     }
 
     if (users) {
-      console.log(users);
       updatedBoxs[2].count = users.data.results.length;
     }
 
+    if (events) {
+      updatedBoxs[3].count = events.data.results.length;
+      const lastTwoEvents = events.data.results.slice(-2);
+      const extractedEventData = lastTwoEvents.map((event) => ({
+        name: event.name,
+        description: event.description,
+        images: event.images,
+        id: event._id,
+        date: event.date,
+        location: event.location,
+        numOfTickets: event.numOfTickets,
+      }));
+      setNewEvents(extractedEventData);
+    }
+
     setBoxs(updatedBoxs);
-  }, [items, orders, users]);
+  }, [items, orders, users, events]);
 
   if (error1 || error2) {
     return <Page404 />;
@@ -106,12 +136,12 @@ export default function Dashboard() {
       <p className="text-2xl font-bold">Over View</p>
 
       <div>
-        <div className="flex flex-wrap justify-center gap-5 py-6">
+        <div className="flex flex-wrap  gap-5 py-6">
           {boxs.map((box) => (
             <div
               key={box.title}
               style={{ backgroundColor: box.color }}
-              className={`p-2 w-[300px] border border-none rounded-md`}
+              className={`flex  justify-between p-3 w-[290px] border border-none rounded-md`}
             >
               <div className="flex gap-1 mb-3">
                 <img src={box.icon} width="40px" />
@@ -128,6 +158,13 @@ export default function Dashboard() {
           <p className="text-xl font-semibold mb-8">New Arrival</p>
 
           <Table columns={thead1} data={newArrival} loading={loading1} />
+        </div>
+        <hr className="w-3/4 mx-auto border" />
+
+        <div className="py-9">
+          <p className="text-xl font-semibold mb-8">Newest Events</p>
+
+          <Table columns={thead3} data={newEvents} loading={loading3} />
         </div>
         <hr className="w-3/4 mx-auto border" />
 
