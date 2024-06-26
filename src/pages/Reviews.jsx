@@ -70,7 +70,6 @@ export default function Reviews() {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       const extractedData = data.Reviews.results.map((review) => ({
         itemName: review?.item?.title,
         itemImage: review?.item?.images,
@@ -80,7 +79,7 @@ export default function Reviews() {
         id: review._id,
       }));
       setReviews(extractedData);
-      setTotalPages(data.numOfPages);
+      setTotalPages(data.Reviews.numOfPages);
     }
   }, [data]);
 

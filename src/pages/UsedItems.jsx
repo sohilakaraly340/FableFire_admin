@@ -63,7 +63,6 @@ export default function UsedItems() {
 
   useEffect(() => {
     if (data) {
-      console.log(data);
       const extractedData = data.data.results.map((item) => ({
         title: item.title,
         images: item.images,

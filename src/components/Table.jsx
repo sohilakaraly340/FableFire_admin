@@ -15,7 +15,7 @@ export default function Table({ columns, data, loading }) {
       [rowIndex]: value,
     }));
 
-    await patchResource(id, { status: value });
+    await patchResource(id, { status: value }, "application/json");
   };
 
   const renderCellData = (column, row, rowIndex) => {
