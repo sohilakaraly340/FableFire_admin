@@ -15,9 +15,6 @@ export default function FormCom({
   page,
 }) {
   const [imagePreviews, setImagePreviews] = useState([]);
-
-  // console.log(initialValues);
-
   useEffect(() => {
     if (initialValues?.images?.length > 0) {
       setImagePreviews(initialValues.images);
