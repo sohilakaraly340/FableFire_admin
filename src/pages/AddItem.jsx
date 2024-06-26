@@ -109,6 +109,7 @@ export default function AddItem({ mode, initialValues = {} }) {
   );
 
   const submit = async (values) => {
+    console.log(values);
     const formData = new FormData();
     for (const key in values) {
       if (key === "images" && values[key].length > 0) {
