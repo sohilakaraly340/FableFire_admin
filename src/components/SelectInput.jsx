@@ -1,9 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Field, ErrorMessage } from "formik";
 
 const SelectField = ({ field, values, setFieldValue }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [filteredOptions, setFilteredOptions] = useState(field.options);
+
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setInputValue(value);
+    const newFilteredOptions = field.options.filter((option) =>
+      option.label.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredOptions(newFilteredOptions);
+  };
+
+  const handleOptionSelect = (option) => {
+    setFieldValue(field.name, option.value);
+    setInputValue(option.label);
+    setFilteredOptions(field.options);
+  };
+
   const currentOption = field.options.find(
-    (option) => option.label === values[field.name]
+    (option) => option.value === values[field.name]
   );
 
   return (
@@ -11,35 +29,27 @@ const SelectField = ({ field, values, setFieldValue }) => {
       <label htmlFor={field.name} className="block text-sm font-bold mb-2">
         {field.title}
       </label>
-      <Field
-        name={field.name}
-        as="select"
+      <input
+        type="text"
         className="mt-1 block w-full p-2 border border-gray-300 rounded"
-        value={values[field.name] || ""}
-        onChange={(event) => setFieldValue(field.name, event.target.value)}
-      >
-        {currentOption ? (
-          <>
-            <option value={currentOption.value}>{currentOption.label}</option>
-            {field.options
-              .filter((option) => option.value !== currentOption.value)
-              .map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-          </>
-        ) : (
-          <>
-            <option value="">Select</option>
-            {field.options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </>
-        )}
-      </Field>
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder="Select"
+      />
+      <ul className="border border-gray-300 rounded mt-1">
+        {filteredOptions.map((option) => (
+          <li
+            key={option.value}
+            className="p-2 hover:bg-gray-200 cursor-pointer"
+            onClick={() => handleOptionSelect(option)}
+          >
+            {option.label}
+          </li>
+        ))}
+      </ul>
+      {currentOption && (
+        <input type="hidden" name={field.name} value={currentOption.value} />
+      )}
       <ErrorMessage
         name={field.name}
         component="div"
