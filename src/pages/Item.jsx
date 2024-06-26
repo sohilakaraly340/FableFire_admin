@@ -28,6 +28,7 @@ export default function Item() {
     { header: "Price", accessor: "price" },
     { header: "No.Stock", accessor: "countInStock" },
     { header: "Category", accessor: "category" },
+    { header: "Type", accessor: "itemType" },
     {
       header: "Actions",
       render: (row) => (
@@ -67,19 +68,19 @@ export default function Item() {
 
   const mapItemData = (items) =>
     items.map((item) => ({
-      title: item.title,
-      price: item.price,
-      description: item.description,
-      publicationDate: item.publicationDate,
-      numOfPage: item.numOfPage,
-      itemType: item.itemType.itemType,
-      countInStock: item.countInStock,
-      images: item.images,
-      category: item.category.title,
-      id: item._id,
-      duration: item.duration,
-      discount: item.discount,
-      authorId: item.authorId.name,
+      title: item?.title,
+      price: item?.price,
+      description: item?.description,
+      publicationDate: item?.publicationDate,
+      numOfPage: item?.numOfPage,
+      itemType: item?.itemType?.itemType,
+      countInStock: item?.countInStock,
+      images: item?.images,
+      category: item?.category?.title,
+      id: item?._id,
+      duration: item?.duration,
+      discount: item?.discount,
+      authorId: item?.authorId?.name,
     }));
 
   useEffect(() => {

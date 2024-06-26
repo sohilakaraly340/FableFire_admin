@@ -62,10 +62,10 @@ export default function Category() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.results.map((cat) => ({
-        title: cat.title,
-        description: cat.description,
-        images: cat.images,
-        id: cat._id,
+        title: cat?.title,
+        description: cat?.description,
+        images: cat?.images,
+        id: cat?._id,
       }));
       setCategory(extractedData);
       setTotalPages(data.data.numOfPages);

@@ -5,7 +5,7 @@ import orderIcon from "../assets/images/icons/usersIcon.svg";
 import { useEffect, useState } from "react";
 import useFetch from "../hooks/useFetch";
 import Page404 from "./Page404";
-import eventIcon from "../assets/images/icons/eventIcon.svg";
+import eventIcon from "../assets/images/icons/events.svg";
 
 export default function Dashboard() {
   const [newArrival, setNewArrival] = useState([]);
@@ -18,6 +18,7 @@ export default function Dashboard() {
       icon: itemIcon,
       color: "#e7fef6",
     },
+    { title: "Our events", count: 0, icon: eventIcon, color: "#daf4ff" },
     {
       title: "All Orders",
       count: 0,
@@ -25,7 +26,6 @@ export default function Dashboard() {
       color: "#FDE2E1",
     },
     { title: "Our Users", count: 0, icon: userIcon, color: "#FEDFAC" },
-    { title: "Our events", count: 0, icon: eventIcon, color: "#FAF2F2" },
   ]);
 
   const thead1 = [
@@ -33,6 +33,7 @@ export default function Dashboard() {
     { header: "Name", accessor: "title" },
     { header: "Price", accessor: "price" },
     { header: "No.Stock", accessor: "countInStock" },
+    { header: "Type", accessor: "itemType" },
     { header: "Category", accessor: "category" },
   ];
 
@@ -78,48 +79,49 @@ export default function Dashboard() {
   useEffect(() => {
     const updatedBoxs = [...boxs];
     if (items) {
-      updatedBoxs[0].count = items.data.results.length;
-      const lastTwoItems = items.data.results.slice(-2);
+      updatedBoxs[0].count = items.data?.results.length;
+      const lastTwoItems = items.data?.results.slice(-2);
       const extractedItemData = lastTwoItems.map((item) => ({
-        title: item.title,
-        price: item.price,
-        countInStock: item.countInStock,
-        images: item.images,
-        category: item.category.title,
+        title: item?.title,
+        price: item?.price,
+        countInStock: item?.countInStock,
+        images: item?.images,
+        category: item?.category?.title,
+        itemType: item?.itemType?.itemType,
       }));
       setNewArrival(extractedItemData);
     }
 
     if (orders) {
-      updatedBoxs[1].count = orders.data.results.length;
-      const lastTwoOrders = orders.data.results.slice(-2);
+      updatedBoxs[2].count = orders.data?.results.length;
+      const lastTwoOrders = orders.data?.results.slice(-2);
       const extractedOrderData = lastTwoOrders.map((order) => ({
-        id: order._id,
-        firstName: order.firstName,
-        email: order.email,
-        address: order.address,
-        phoneNumber: order.phoneNumber,
-        totalPrice: order.totalPrice,
-        status: order.status,
+        id: order?._id,
+        firstName: order?.firstName,
+        email: order?.email,
+        address: order?.address,
+        phoneNumber: order?.phoneNumber,
+        totalPrice: order?.totalPrice,
+        status: order?.status,
       }));
       setNewOrders(extractedOrderData);
     }
 
     if (users) {
-      updatedBoxs[2].count = users.data.results.length;
+      updatedBoxs[3].count = users.data?.results.length;
     }
 
     if (events) {
-      updatedBoxs[3].count = events.data.results.length;
-      const lastTwoEvents = events.data.results.slice(-2);
+      updatedBoxs[1].count = events.data?.results.length;
+      const lastTwoEvents = events.data?.results.slice(-2);
       const extractedEventData = lastTwoEvents.map((event) => ({
-        name: event.name,
-        description: event.description,
-        images: event.images,
-        id: event._id,
-        date: event.date,
-        location: event.location,
-        numOfTickets: event.numOfTickets,
+        name: event?.name,
+        description: event?.description,
+        images: event?.images,
+        id: event?._id,
+        date: event?.date,
+        location: event?.location,
+        numOfTickets: event?.numOfTickets,
       }));
       setNewEvents(extractedEventData);
     }
@@ -143,7 +145,7 @@ export default function Dashboard() {
               style={{ backgroundColor: box.color }}
               className={`flex  justify-between p-3 w-[290px] border border-none rounded-md`}
             >
-              <div className="flex gap-1 mb-3">
+              <div className="flex gap-3 mb-3">
                 <img src={box.icon} width="40px" />
                 <p className="font-medium">{box.title}</p>
               </div>

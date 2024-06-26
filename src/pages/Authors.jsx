@@ -62,10 +62,10 @@ export default function Authors() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.results.map((author) => ({
-        name: author.name,
-        description: author.description,
-        images: author.images,
-        id: author._id,
+        name: author?.name,
+        description: author?.description,
+        images: author?.images,
+        id: author?._id,
       }));
       setAuthors(extractedData);
       setTotalPages(data.data.numOfPages);

@@ -26,13 +26,13 @@ export default function Order() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.results.map((order) => ({
-        id: order._id,
-        firstName: order.firstName,
-        email: order.email,
-        address: order.address,
-        phoneNumber: order.phoneNumber,
-        totalPrice: order.totalPrice,
-        status: order.status,
+        id: order?._id,
+        firstName: order?.firstName,
+        email: order?.email,
+        address: order?.address,
+        phoneNumber: order?.phoneNumber,
+        totalPrice: order?.totalPrice,
+        status: order?.status,
       }));
       setOrders(extractedData);
       setTotalPages(data.data.numOfPages);
