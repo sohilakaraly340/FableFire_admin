@@ -23,7 +23,14 @@ export default function Item() {
   const itemsPerPage = 3;
 
   const thead = [
-    { header: "Image", accessor: "images" },
+    {
+      header: "Image",
+      render: (row) => (
+        <Link to={`/Items/ItemDetails/${row.id}`}>
+          <img src={row.images} className="w-[70%] m-auto" />
+        </Link>
+      ),
+    },
     { header: "Name", accessor: "title" },
     { header: "Price", accessor: "price" },
     { header: "No.Stock", accessor: "countInStock" },

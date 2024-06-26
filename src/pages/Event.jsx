@@ -18,7 +18,14 @@ export default function Event() {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 3;
   const thead = [
-    { header: "Image", accessor: "images" },
+    {
+      header: "Image",
+      render: (row) => (
+        <Link to={`/Events/EventDetails/${row.id}`}>
+          <img src={row.images} className="w-[70%] m-auto" />
+        </Link>
+      ),
+    },
     { header: "Name", accessor: "name" },
     { header: "Location", accessor: "location" },
     { header: "Date", accessor: "date" },

@@ -10,7 +10,6 @@ const ValidationSchema = Yup.object({
   title: Yup.string().required("Required"),
   description: Yup.string().required("Required"),
   numOfPage: Yup.number()
-    .required("Required")
     .positive("Must be a positive number")
     .integer("Must be an integer"),
   publicationDate: Yup.date().required("Required"),
@@ -25,7 +24,10 @@ const ValidationSchema = Yup.object({
   itemType: Yup.string().required("Required"),
   category: Yup.string().required("Required"),
   authorId: Yup.string().required("Required"),
-  discount: Yup.number(),
+  discount: Yup.number()
+    .required("Required")
+    .min(0, "Min discount is 0")
+    .max(90, "Max discount is 90%"),
   duration: Yup.number(),
 });
 
