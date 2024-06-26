@@ -1,0 +1,21 @@
+.form-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.left-column,
+.right-column {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .left-column,
+  .right-column {
+    width: 50%;
+  }
+}
+
+.left-column .form-field,
+.right-column .form-field {
+  padding: 1rem;
+}

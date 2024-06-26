@@ -51,7 +51,7 @@ const createInputs = (data) => {
     { name: "description", title: "Description", type: "textarea" },
     { name: "images", title: "Images", type: "file", multiple: true },
     { name: "publicationDate", title: "Publication Date", type: "date" },
-    { name: "price", title: "Price", type: "number" },
+    { name: "price", title: "Price in USD", type: "number" },
     { name: "countInStock", title: "No of Stock", type: "number" },
     {
       name: "numOfPage",
@@ -109,7 +109,6 @@ export default function AddItem({ mode, initialValues = {} }) {
   );
 
   const submit = async (values) => {
-    console.log(values);
     const formData = new FormData();
     for (const key in values) {
       if (key === "images" && values[key].length > 0) {
@@ -135,7 +134,7 @@ export default function AddItem({ mode, initialValues = {} }) {
   }
 
   return (
-    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] ">
+    <div className="ml-[26%]  sm:ml-[20%] md:ml-[16%] px-4 ">
       <FormCom
         submit={submit}
         ValidationSchema={ValidationSchema}

@@ -56,7 +56,7 @@ const SelectField = ({ field, values, setFieldValue }) => {
       </label>
       <input
         type="text"
-        className="mt-1 block w-full p-2 border border-gray-300 rounded"
+        className="mt-1 block w-full p-2 border border-button rounded"
         value={inputValue}
         onChange={handleInputChange}
         onFocus={handleInputFocus}
@@ -64,11 +64,11 @@ const SelectField = ({ field, values, setFieldValue }) => {
         placeholder="Select"
       />
       {isDropdownVisible && (
-        <ul className="border border-gray-300 rounded mt-1 max-h-60 overflow-y-auto">
+        <ul className="border border-button rounded mt-1 max-h-60 overflow-y-auto">
           {filteredOptions.map((option) => (
             <li
               key={option.value}
-              className="p-2 hover:bg-gray-200 cursor-pointer"
+              className="p-2 hover:bg-button hover:text-white cursor-pointer"
               onClick={() => handleOptionSelect(option)}
             >
               {option.label}

@@ -28,7 +28,7 @@ export default function AddAdmin({ mode, initialValues = {} }) {
     setLoading(false);
   };
   return (
-    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] ">
+    <div className="ml-[26%]  sm:ml-[20%] md:ml-[16%] px-4 ">
       <FormCom
         submit={submit}
         ValidationSchema={ValidationSchema}

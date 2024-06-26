@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ErrorMessage, Field, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import FormHeader from "./FormHeader";
 import FormField from "./FormField";
 import ImageField from "./ImageField";
@@ -15,6 +15,7 @@ export default function FormCom({
   page,
 }) {
   const [imagePreviews, setImagePreviews] = useState([]);
+
   useEffect(() => {
     if (initialValues?.images?.length > 0) {
       setImagePreviews(initialValues.images);
@@ -38,6 +39,10 @@ export default function FormCom({
     setImagePreviews(previews);
   };
 
+  const generalInputs = inputs.filter((input) => input.as !== "select");
+  const selectInputs = inputs.filter((input) => input.as === "select");
+  const hasSelectInputs = selectInputs.length > 0;
+
   return (
     <Formik
       initialValues={initialValues}
@@ -47,33 +52,46 @@ export default function FormCom({
       {({ setFieldValue, values }) => (
         <Form>
           <FormHeader mode={mode} page={page} loading={loading} />
-
-          {inputs.map((field, index) => (
-            <div key={index} className=" md:px-20 py-8">
-              {field.as === "select" ? (
-                <SelectInput
-                  field={field}
-                  values={values}
-                  setFieldValue={setFieldValue}
-                />
-              ) : field.type === "file" ? (
-                <ImageField
-                  key={index}
-                  field={field}
-                  imagePreviews={imagePreviews}
-                  handleImageChange={handleImageChange}
-                  setFieldValue={setFieldValue}
-                />
-              ) : (
-                <FormField
-                  key={index}
-                  field={field}
-                  values={values}
-                  setFieldValue={setFieldValue}
-                />
-              )}
+          <div
+            className={`flex flex-wrap ${
+              hasSelectInputs ? "flex-row" : "flex-col"
+            }`}
+          >
+            <div className={`w-full ${hasSelectInputs ? "lg:w-3/4" : ""} px-4`}>
+              {generalInputs.map((field, index) => (
+                <div key={index} className="py-4">
+                  {field.type === "file" ? (
+                    <ImageField
+                      field={field}
+                      imagePreviews={imagePreviews}
+                      handleImageChange={handleImageChange}
+                      setFieldValue={setFieldValue}
+                    />
+                  ) : (
+                    <FormField
+                      field={field}
+                      values={values}
+                      setFieldValue={setFieldValue}
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
+
+            {hasSelectInputs && (
+              <div className="w-full lg:w-1/4 px-4 border h-fit mt-10 border-button border-dashed rounded">
+                {selectInputs.map((field, index) => (
+                  <div key={index} className="py-4">
+                    <SelectInput
+                      field={field}
+                      values={values}
+                      setFieldValue={setFieldValue}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </Form>
       )}
     </Formik>
