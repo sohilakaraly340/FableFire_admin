@@ -80,7 +80,7 @@ export default function Category() {
   };
 
   return (
-    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
+    <div className="ml-[26%]  sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <Header
         title={"All Categories"}
         buttonText={"Add Category"}

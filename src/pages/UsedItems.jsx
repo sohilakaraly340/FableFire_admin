@@ -84,7 +84,7 @@ export default function UsedItems() {
     setCurrentPage(page);
   };
   return (
-    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] px-4 py-8">
+    <div className="ml-[26%]  sm:ml-[20%] md:ml-[16%] px-4 py-8">
       <div className="flex justify-between items-center ">
         <p className="text-2xl font-bold ">All Used Items</p>
       </div>

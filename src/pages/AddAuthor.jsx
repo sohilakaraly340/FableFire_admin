@@ -52,7 +52,7 @@ export default function AddAuthor({ mode, initialValues = {} }) {
   };
 
   return (
-    <div className="ml-[26%] sm:ml-[20%] md:ml-[16%] ">
+    <div className="ml-[26%]  sm:ml-[20%] md:ml-[16%] px-4 ">
       <FormCom
         submit={submit}
         ValidationSchema={ValidationSchema}

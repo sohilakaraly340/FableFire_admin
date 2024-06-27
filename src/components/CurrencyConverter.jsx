@@ -5,7 +5,7 @@ const CurrencyConverter = ({ price, children }) => {
   const { localPrice, currency, loading, error } = useCurrencyConverter(price);
 
   if (loading) {
-    return <div className="skeleton h-2 w-[100px] mx-auto my-2"></div>;
+    return <div className="skeleton h-2 w-[20px] mx-auto my-2"></div>;
   }
 
   if (error) {
