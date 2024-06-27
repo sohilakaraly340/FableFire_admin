@@ -17,6 +17,9 @@ export default function SignUp() {
     password: Yup.string()
       .min(8, "Password must be at least 8 characters")
       .required("Password is required"),
+    confirmPassword: Yup.string()
+      .oneOf([Yup.ref("password"), null], "Password must match ")
+      .required("Confirm Password is required"),
   });
   const navigate = useNavigate();
 
@@ -25,13 +28,16 @@ export default function SignUp() {
       email: "",
       password: "",
       firstName: "",
+      confirmPassword: "",
     },
 
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
         const data = await axios.post("http://localhost:3005/api/v1/user", {
-          ...values,
+          firstName: values.firstName,
+          email: values.email,
+          password: values.password,
           role: "admin",
         });
         toast.success("SignUp successfully!");
@@ -99,6 +105,28 @@ export default function SignUp() {
               />
               {formik.touched.password && formik.errors.password ? (
                 <div className="text-red-500"> {formik.errors.password}</div>
+              ) : null}
+            </div>
+
+            <div className="pb-2">
+              <label className="text-textcolor1" htmlFor="password">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.confirmPassword}
+                className=" bg-transparent border-b border-gray-400 w-full focus:outline-none "
+              />
+              {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword ? (
+                <div className="text-red-500">
+                  {" "}
+                  {formik.errors.confirmPassword}
+                </div>
               ) : null}
             </div>
 
