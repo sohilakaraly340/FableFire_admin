@@ -64,13 +64,13 @@ export default function UsedItems() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.results.map((item) => ({
-        title: item.title,
-        images: item.images,
-        userName: item.user.firstName,
-        userImage: item.user.images,
-        price: item.price,
-        email: item.email,
-        id: item._id,
+        title: item?.title,
+        images: item?.images,
+        userName: item?.user?.firstName,
+        userImage: item?.user?.images,
+        price: item?.price,
+        email: item?.email,
+        id: item?._id,
       }));
       setUsedItems(extractedData);
       setTotalPages(data.data.numOfPages);

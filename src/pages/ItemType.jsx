@@ -56,8 +56,8 @@ export default function ItemType() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.map((itemType) => ({
-        itemType: itemType.itemType,
-        id: itemType._id,
+        itemType: itemType?.itemType,
+        id: itemType?._id,
       }));
       setAllItemType(extractedData);
     }

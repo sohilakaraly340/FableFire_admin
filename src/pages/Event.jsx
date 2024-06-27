@@ -63,13 +63,13 @@ export default function Event() {
   useEffect(() => {
     if (data) {
       const extractedData = data.data.results.map((event) => ({
-        name: event.name,
-        description: event.description,
-        images: event.images,
-        id: event._id,
-        date: event.date,
-        location: event.location,
-        numOfTickets: event.numOfTickets,
+        name: event?.name,
+        description: event?.description,
+        images: event?.images,
+        id: event?._id,
+        date: event?.date,
+        location: event?.location,
+        numOfTickets: event?.numOfTickets,
       }));
       setEvent(extractedData);
       setTotalPages(data.data.numOfPages);
