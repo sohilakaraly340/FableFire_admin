@@ -20,6 +20,7 @@ export default function Item() {
   const [searchResults, setSearchResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [searchLoading, setSearchLoading] = useState(false);
   const itemsPerPage = 3;
 
   const thead = [
@@ -88,7 +89,7 @@ export default function Item() {
       setAllItem(mapItemData(data.data.results));
       setTotalPages(data.data.numOfPages);
     }
-  }, [data, currentPage]);
+  }, [data, currentPage, searchTerm]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -98,17 +99,21 @@ export default function Item() {
     const fetchSearchResults = async () => {
       if (searchTerm) {
         try {
+          setSearchLoading(true);
           const { data } = await axios.get(
             `http://localhost:3005/api/v1/item/search/${searchTerm}?page=${currentPage}&limit=${itemsPerPage}`
           );
           setSearchResults(mapItemData(data.data.itemsByTitle));
-          setTotalPages(data.data.numOfPages);
+          setTotalPages(
+            Math.ceil(data.data.itemsByTitle.length / itemsPerPage)
+          );
         } catch (error) {
           toast.error(`Error fetching : ${error.response.data.message}`);
         }
       } else {
         setSearchResults([]);
       }
+      setSearchLoading(false);
     };
 
     fetchSearchResults();
@@ -133,7 +138,11 @@ export default function Item() {
         searchTerm={searchTerm}
       />
       <div className="py-8">
-        <Table columns={thead} data={displayedItems} loading={loading} />
+        <Table
+          columns={thead}
+          data={displayedItems}
+          loading={loading || searchLoading}
+        />
       </div>
       {showDeleteModal && (
         <PopUp

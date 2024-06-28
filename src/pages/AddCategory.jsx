@@ -7,7 +7,7 @@ import usePatch from "../hooks/usePatch";
 
 const ValidationSchema = Yup.object({
   title: Yup.string().required("Required"),
-  description: Yup.string().required("Required"),
+  description: Yup.string().required("Required").min(5, "Max 5 characters"),
   images: Yup.array().min(1, "At least one image is required"),
 });
 
