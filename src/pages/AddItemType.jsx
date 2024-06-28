@@ -26,7 +26,7 @@ export default function AddItemType({ mode, initialValues = {} }) {
       try {
         setLoading(true);
         await axios.patch(
-          `http://localhost:3005/api/v1/admin/itemType/${values.id}`,
+          `https://online-book-store-r5k7.onrender.com/api/v1/admin/itemType/${values.id}`,
           values,
           {
             headers: {
@@ -43,7 +43,7 @@ export default function AddItemType({ mode, initialValues = {} }) {
       try {
         setLoading(true);
         await axios.post(
-          "http://localhost:3005/api/v1/admin/itemType",
+          "https://online-book-store-r5k7.onrender.com/api/v1/admin/itemType",
           values,
           {
             headers: {

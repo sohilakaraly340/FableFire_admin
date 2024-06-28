@@ -25,11 +25,11 @@ export default function AddAuthor({ mode, initialValues = {} }) {
   }
 
   const { postResource, loading: postLoading } = usePost(
-    "http://localhost:3005/api/v1/admin/author"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/author"
   );
 
   const { patchResource, loading: patchLoading } = usePatch(
-    "http://localhost:3005/api/v1/admin/author"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/author"
   );
 
   const submit = async (values) => {

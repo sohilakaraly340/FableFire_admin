@@ -54,11 +54,11 @@ export default function UsedItems() {
   };
 
   const { deleteResource, loading: loadingDelete } = useDelete(
-    "http://localhost:3005/api/v1/usedItem"
+    "https://online-book-store-r5k7.onrender.com/api/v1/usedItem"
   );
 
   const { data, loading, error } = useFetch(
-    `http://localhost:3005/api/v1/usedItem?page=${currentPage}&limit=${itemsPerPage}`
+    `https://online-book-store-r5k7.onrender.com/api/v1/usedItem?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {

@@ -52,11 +52,11 @@ export default function Category() {
   };
 
   const { deleteResource, loading: loadingDelete } = useDelete(
-    "http://localhost:3005/api/v1/admin/category"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/category"
   );
 
   const { data, loading, error } = useFetch(
-    `http://localhost:3005/api/v1/category?page=${currentPage}&limit=${itemsPerPage} `
+    `https://online-book-store-r5k7.onrender.com/api/v1/category?page=${currentPage}&limit=${itemsPerPage} `
   );
 
   useEffect(() => {

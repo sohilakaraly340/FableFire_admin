@@ -47,7 +47,7 @@ const Otp = () => {
               try {
                 setLoading(true);
                 const res = await axios.post(
-                  "http://localhost:3005/api/v1/admin/user/verfiy-otp",
+                  "https://online-book-store-r5k7.onrender.com/api/v1/admin/user/verfiy-otp",
                   { otp: otp, email: values.email }
                 );
                 toast.success("OTP verified successfully!");
