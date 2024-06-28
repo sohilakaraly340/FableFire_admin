@@ -25,7 +25,6 @@ const ValidationSchema = Yup.object({
   category: Yup.string().required("Required"),
   authorId: Yup.string().required("Required"),
   discount: Yup.number()
-    .required("Required")
     .min(0, "Min discount is 0")
     .max(90, "Max discount is 90%"),
   duration: Yup.number(),
