@@ -56,7 +56,7 @@ export default function Table({ columns, data, loading }) {
       return (
         <>
           {imageState.loading && (
-            <div className="skeleton h-36 w-full m-auto"></div>
+            <div className="skeleton h-10 md:h-36 w-full m-auto"></div>
           )}
           {!imageState.loading && imageState.error && (
             <img src={fallbackImage} alt="Fallback" className="m-auto w-1/4" />
@@ -64,7 +64,7 @@ export default function Table({ columns, data, loading }) {
           {!imageState.error && (
             <img
               src={cellData[0]}
-              className="w-[80%] h-[150px] m-auto object-cover"
+              className="w-[100%] md:w-[80%] md:h-[150px] m-auto object-cover"
               onLoad={() => handleImageLoad(rowIndex)}
               onError={() => handleImageError(rowIndex)}
               style={{ display: imageState.loading ? "none" : "block" }}
