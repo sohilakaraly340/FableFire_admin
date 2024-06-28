@@ -26,12 +26,20 @@ export default function usePatch(url, headers = {}) {
         headers: headersWithContentType,
       });
 
-      console.log(response.data);
       toast.success("Updated successfully!");
       return response.data;
     } catch (err) {
       setError(err);
-      toast.error(`Error Updating: ${err.response.data.message}`);
+      if (
+        err.response.data.message === "jwt expired" ||
+        err.response.data.message === "invalid signature"
+      ) {
+        toast.error("Session Expired! Please login again.");
+        localStorage.clear();
+        window.location.reload();
+      } else {
+        toast.error(`Error fetching : ${err.response.data.message}`);
+      }
     } finally {
       setLoading(false);
     }

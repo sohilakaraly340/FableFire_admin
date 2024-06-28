@@ -24,7 +24,16 @@ export default function usePost(url, headers = {}) {
       return response.data;
     } catch (err) {
       setError(err);
-      toast.error(`Error Adding : ${err.response.data.message}`);
+      if (
+        err.response.data.message === "jwt expired" ||
+        err.response.data.message === "invalid signature"
+      ) {
+        toast.error("Session Expired! Please login again.");
+        localStorage.clear();
+        window.location.reload();
+      } else {
+        toast.error(`Error fetching : ${err.response.data.message}`);
+      }
     } finally {
       setLoading(false);
     }
