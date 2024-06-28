@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import usePatch from "../hooks/usePatch";
 import CurrencyConverter from "./CurrencyConverter";
+import fallbackImage from "../assets/images/imgError.png";
 
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
   const { patchResource } = usePatch(
     "http://localhost:3005/api/v1/admin/order"
   );
+  const [imageStates, setImageStates] = useState({});
 
   const handleStatusChange = async (event, rowIndex, id) => {
     const { value } = event.target;
@@ -18,8 +20,23 @@ export default function Table({ columns, data, loading }) {
     await patchResource(id, { status: value }, "application/json");
   };
 
+  const handleImageLoad = (rowIndex) => {
+    setImageStates((prevState) => ({
+      ...prevState,
+      [rowIndex]: { loading: false, error: false },
+    }));
+  };
+
+  const handleImageError = (rowIndex) => {
+    setImageStates((prevState) => ({
+      ...prevState,
+      [rowIndex]: { loading: false, error: true },
+    }));
+  };
+
   const renderCellData = (column, row, rowIndex) => {
     const cellData = row[column.accessor];
+    const imageState = imageStates[rowIndex] || { loading: true, error: false };
 
     if (column.accessor === "status") {
       return (
@@ -37,11 +54,23 @@ export default function Table({ columns, data, loading }) {
 
     if (column.accessor === "images") {
       return (
-        <img
-          src={`${cellData[0]}`}
-          className="w-[150px] md:w-[60%]  m-auto"
-          alt="image"
-        />
+        <>
+          {imageState.loading && (
+            <div className="skeleton h-36 w-full m-auto"></div>
+          )}
+          {!imageState.loading && imageState.error && (
+            <img src={fallbackImage} alt="Fallback" className="m-auto w-1/4" />
+          )}
+          {!imageState.error && (
+            <img
+              src={cellData[0]}
+              className="w-[80%] h-[150px] m-auto object-cover"
+              onLoad={() => handleImageLoad(rowIndex)}
+              onError={() => handleImageError(rowIndex)}
+              style={{ display: imageState.loading ? "none" : "block" }}
+            />
+          )}
+        </>
       );
     }
 
@@ -109,7 +138,7 @@ export default function Table({ columns, data, loading }) {
                 {columns.map((column, colIndex) => (
                   <td key={colIndex} className="w-[200px]">
                     {column.render
-                      ? column.render(row)
+                      ? column.render(row, rowIndex)
                       : renderCellData(column, row, rowIndex)}
                   </td>
                 ))}

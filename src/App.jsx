@@ -22,7 +22,6 @@ import Otp from "./components/Otp";
 import SignUp from "./pages/SignUp";
 import Reviews from "./pages/Reviews";
 import UsedItems from "./pages/UsedItems";
-import EventDetails from "./pages/EventDetails";
 import ItemDetails from "./pages/ItemDetails";
 function App() {
   const location = useLocation();
@@ -52,7 +51,6 @@ function App() {
         />
         <Route path="/Orders" element={<PrivateRoute element={<Order />} />} />
         <Route path="Events" element={<PrivateRoute element={<Event />} />} />
-        <Route path="/Events/EventDetails/:id" element={<EventDetails />} />
         <Route
           path="/Events/AddEvent"
           element={<PrivateRoute element={<AddEvent mode="add" />} />}
@@ -63,10 +61,10 @@ function App() {
         />
 
         <Route path="/Items" element={<PrivateRoute element={<Item />} />} />
-        <Route
+        {/* <Route
           path="/Items/ItemDetails/:id"
           element={<PrivateRoute element={<ItemDetails />} />}
-        />
+        /> */}
         <Route
           path="/Items/AddItem"
           element={<PrivateRoute element={<AddItem mode="add" />} />}

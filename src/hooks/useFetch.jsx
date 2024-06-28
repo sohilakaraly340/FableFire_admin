@@ -24,7 +24,10 @@ export default function useGet(url, headers = {}) {
         setData(response.data);
       } catch (err) {
         setError(err);
-        if (err.response.data.message === "jwt expired") {
+        if (
+          err.response.data.message === "jwt expired" ||
+          err.response.data.message === "invalid signature"
+        ) {
           toast.error("Session Expired! Please login again.");
           localStorage.clear();
           window.location.reload();
