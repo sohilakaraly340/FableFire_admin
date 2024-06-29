@@ -52,11 +52,11 @@ export default function Authors() {
   };
 
   const { deleteResource, loading: loadingDelete } = useDelete(
-    "http://localhost:3005/api/v1/admin/author"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/author"
   );
 
   const { data, loading, error } = useFetch(
-    `http://localhost:3005/api/v1/author?page=${currentPage}&limit=${itemsPerPage}`
+    `https://online-book-store-r5k7.onrender.com/api/v1/author?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {

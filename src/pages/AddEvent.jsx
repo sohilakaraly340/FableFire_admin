@@ -32,11 +32,11 @@ export default function AddEvent({ mode, initialValues = {} }) {
   }
 
   const { postResource, loading: postLoading } = usePost(
-    "http://localhost:3005/api/v1/admin/event"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/event"
   );
 
   const { patchResource, loading: patchLoading } = usePatch(
-    "http://localhost:3005/api/v1/admin/event"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/event"
   );
 
   const submit = async (values) => {

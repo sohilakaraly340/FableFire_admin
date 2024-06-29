@@ -6,7 +6,7 @@ import fallbackImage from "../assets/images/imgError.png";
 export default function Table({ columns, data, loading }) {
   const [selectedStatus, setSelectedStatus] = useState({});
   const { patchResource } = usePatch(
-    "http://localhost:3005/api/v1/admin/order"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/order"
   );
   const [imageStates, setImageStates] = useState({});
 

@@ -61,11 +61,11 @@ export default function Reviews() {
   };
 
   const { deleteResource, loading: loadingDelete } = useDelete(
-    "http://localhost:3005/api/v1/review"
+    "https://online-book-store-r5k7.onrender.com/api/v1/review"
   );
 
   const { data, loading, error } = useFetch(
-    `http://localhost:3005/api/v1/review?page=${currentPage}&limit=${itemsPerPage}`
+    `https://online-book-store-r5k7.onrender.com/api/v1/review?page=${currentPage}&limit=${itemsPerPage}`
   );
 
   useEffect(() => {

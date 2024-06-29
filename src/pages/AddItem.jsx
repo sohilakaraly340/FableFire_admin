@@ -100,13 +100,15 @@ export default function AddItem({ mode, initialValues = {} }) {
     initialValues = location.state.fromEdit.row;
   }
 
-  const { data } = useFetch("http://localhost:3005/api/v1/admin/item/options");
+  const { data } = useFetch(
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/item/options"
+  );
   const { postResource, loading: postLoading } = usePost(
-    "http://localhost:3005/api/v1/admin/item"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/item"
   );
 
   const { patchResource, loading: patchLoading } = usePatch(
-    "http://localhost:3005/api/v1/admin/item"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/item"
   );
 
   const submit = async (values) => {

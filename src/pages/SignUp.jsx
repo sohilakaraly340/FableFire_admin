@@ -34,12 +34,15 @@ export default function SignUp() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       try {
-        const data = await axios.post("http://localhost:3005/api/v1/user", {
-          firstName: values.firstName,
-          email: values.email,
-          password: values.password,
-          role: "admin",
-        });
+        const data = await axios.post(
+          "https://online-book-store-r5k7.onrender.com/api/v1/user",
+          {
+            firstName: values.firstName,
+            email: values.email,
+            password: values.password,
+            role: "admin",
+          }
+        );
         toast.success("SignUp successfully!");
         navigate("/");
       } catch (error) {

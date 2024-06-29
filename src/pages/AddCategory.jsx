@@ -26,11 +26,11 @@ export default function AddCategory({ mode, initialValues = {} }) {
   }
 
   const { postResource, loading: postLoading } = usePost(
-    "http://localhost:3005/api/v1/admin/category"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/category"
   );
 
   const { patchResource, loading: patchLoading } = usePatch(
-    "http://localhost:3005/api/v1/admin/category"
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/category"
   );
 
   const submit = async (values) => {

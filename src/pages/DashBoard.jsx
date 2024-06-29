@@ -57,24 +57,26 @@ export default function Dashboard() {
     data: items,
     loading: loading1,
     error: error1,
-  } = useFetch("http://localhost:3005/api/v1/item");
+  } = useFetch("https://online-book-store-r5k7.onrender.com/api/v1/item");
 
   const {
     data: orders,
     loading: loading2,
     error: error2,
-  } = useFetch("http://localhost:3005/api/v1/admin/order");
+  } = useFetch(
+    "https://online-book-store-r5k7.onrender.com/api/v1/admin/order"
+  );
   const {
     data: users,
     loading: loading3,
     error: error3,
-  } = useFetch("http://localhost:3005/api/v1/admin/user");
+  } = useFetch("https://online-book-store-r5k7.onrender.com/api/v1/admin/user");
 
   const {
     data: events,
     loading: loading4,
     error: error4,
-  } = useFetch("http://localhost:3005/api/v1/event");
+  } = useFetch("https://online-book-store-r5k7.onrender.com/api/v1/event");
 
   useEffect(() => {
     const updatedBoxs = [...boxs];

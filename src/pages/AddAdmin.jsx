@@ -17,7 +17,7 @@ export default function AddAdmin({ mode, initialValues = {} }) {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:3005/api/v1/admin/user",
+        "https://online-book-store-r5k7.onrender.com/api/v1/admin/user",
         values
       );
       toast.success("OTP sended successfully!");
